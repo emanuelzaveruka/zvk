@@ -1,0 +1,76 @@
+---
+import { SEO as BaseSEO } from 'astro-seo';
+import type { SeoProps } from '../types/seo-props';
+
+
+interface Props {
+  seo?: SeoProps;    
+  header?: boolean;
+  headerClass?: string;
+  class?: string;
+  light?: boolean;
+  mainClass?: string;
+  footer?: boolean;
+}
+
+const {
+  baseUrl = 'https://emanuelzaveruka.com',
+  description = 'My place in the internet!',
+  keywords = [
+    'emanuel',
+    'zaveruka',
+    'resume',
+    'portifolio',
+    'personal',
+    'website',
+    'cv',
+    'curriculum',
+    'vitale'
+  ],
+  urlPath = '/',
+  title = "Emanuel Zaveruka",
+  imagePath = '/images/logoCaligo.png'
+} = Astro.props as SeoProps;
+
+const fullUrl = baseUrl && urlPath ? new URL(urlPath, baseUrl).toString() : undefined;
+const fullImageUrl = baseUrl && imagePath ? new URL(imagePath, baseUrl).toString() : undefined;
+---
+
+<BaseSEO
+  title={title}
+  description={description}
+  canonical={fullUrl}
+  openGraph={{
+    basic: {
+      title: title ?? '',
+      type: 'website',
+      image: fullImageUrl ?? '',
+      url: fullUrl,
+    },
+    optional: {
+      description,
+      siteName: title,
+    },
+    image: {
+      url: fullImageUrl,
+      alt: title,
+    },
+  }}
+  twitter={{
+    card: 'summary_large_image',
+    title,
+    description,
+    image: fullImageUrl,
+    imageAlt: title,
+  }}
+  extend={{
+    meta: keywords?.length
+      ? [
+          {
+            name: 'keywords',
+            content: keywords.join(', '),
+          },
+        ]
+      : [],
+  }}
+/>

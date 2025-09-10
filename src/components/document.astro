@@ -1,0 +1,142 @@
+---
+import Footer from '../components/footer.astro';
+
+import Seo from '../components/seo.astro';
+import type { SeoProps } from '../types/seo-props';
+
+interface Props {
+  seo?: SeoProps;
+  header?: boolean;
+  headerClass?: string;
+  class?: string;
+  light?: boolean;
+  mainClass?: string;
+  footer?: boolean;
+}
+
+const {
+  seo,
+  header = true,
+  footer = true,
+  light,
+  headerClass = '!text-sm !font-normal'
+} = Astro.props;  
+
+const ldJson = JSON.stringify({
+  '@context': 'http://www.schema.org',
+  '@type': 'person',
+  name: 'Emanuel Zaveruka',
+  jobTitle: 'Web Developer',
+  gender: 'male',
+  url: 'https://emanuelzaveruka.com',
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: 'Sitio Cercado',
+    addressRegion: 'Curitiba (PR)',
+    addressCountry: 'Brazil'
+  },
+  email: 'emanuelzaveruka@gmail.com',
+  birthDate: '2003-01-05',
+  nationality: 'Brazilian',
+  telephone: '+5541997399754'
+});
+---
+
+<!doctype html>
+<html lang="en" class={light ? "light" : "dark"}>
+  <head>
+    <!-- Simple meta -->
+    <meta name="theme-color" content="#000000" />
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+
+    <!-- General SEO -->
+    <script is:inline type="application/ld+json" set:html={ldJson} />
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="robots" content="index, follow" />
+
+    <!-- Public metrics available at metrics.arthur.one/arthur.place 
+    <script>
+      defer
+      is:inline
+      data-domain="arthur.place"
+      src="https://metrics.arthur.one/js/script.js"></script>
+      -->
+    <!-- Icons -->
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="/icons/logo.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/icons/logo.png"
+    />
+    <link
+      rel="shortcut icon"
+      type="image/png"
+      sizes="32x32"
+      href="/icons/logo.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/icons/logo.png"
+    />
+    <link
+      rel="shortcut icon"
+      type="image/png"
+      sizes="16x16"
+      href="/icons/logo.png"
+    />
+
+    {/* font */}
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&family=Work+Sans:wght@300;500&display=swap"
+      rel="stylesheet"
+    />
+
+     <Seo seo={seo}/> 
+
+    <slot name="head" />
+  </head>
+
+  <body
+    class='antialiased flex w-full flex-col justify-center items-center tracking-tight dark:bg-neutral-900 dark:text-neutral-50 dark:bg-[url("/images/background-dark.svg")] min-h-screen'
+  >
+    <div class="flex justify-start items-start max-w-prose:flex-col-reverse">
+      <main
+        class:list={[
+          "flex flex-col items-center justify-center gap-5 p-5 h-full",
+          Astro.props.class,
+        ] }
+      >
+        <slot />
+        </main>
+        <!--  {header && <MainNav class={headerClass} />} -->
+    </div>
+    {footer && <Footer />}
+  </body>
+</html>
+
+<style is:global>
+  /* Support for flag emojis */
+  @font-face {
+    font-family: "Twemoji Country Flags";
+    unicode-range: U+1F1E6-1F1FF, U+1F3F4, U+E0062-E0063, U+E0065, U+E0067,
+      U+E006C, U+E006E, U+E0073-E0074, U+E0077, U+E007F;
+    src: url("https://cdn.jsdelivr.net/npm/country-flag-emoji-polyfill/dist/TwemojiCountryFlags.woff2")
+      format("woff2");
+    font-display: swap;
+  }
+</style>
