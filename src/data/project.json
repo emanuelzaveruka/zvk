@@ -1,0 +1,18 @@
+[
+  {
+    "owner": "emanuelzaveruka",
+    "name": "cali-commerce",
+    "prettyName": "Cali Commerce",
+    "description": "E-commerce experimental com Next.js e Tailwind.",
+    "stars": 32,
+    "downloads": 0
+  },
+  {
+    "owner": "emanuelzaveruka",
+    "name": "zaid-app",
+    "prettyName": "Zaid App",
+    "description": "App de tradução de áudio em tempo real usando Node e Pub/Sub.",
+    "stars": 18,
+    "downloads": 150
+  }
+]
