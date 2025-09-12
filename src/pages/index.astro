@@ -1,11 +1,13 @@
 ---
 import "../style/global.css";
 import Section from "../components/section.astro";
-import Document from "../components/document.astro";
+import Document from "../layouts/document.astro";
 import { SocialMediaLinks } from "../util/link/social-media";
 import SocialMediaCard from "../components/social-media-card.astro";
 import ProjectCard from "../components/project-card.astro";
 import projects from "../data/project.json";
+import {posts, sortedPosts} from "../util/get-post";
+import PostCard from "../components/post-card.astro";
 ---
 
 <Document>
@@ -47,22 +49,43 @@ import projects from "../data/project.json";
     </div>
   </Section>
   <Section>
-    <p>
-       Additionally, you can explore some of my open source
-      projects below:
+    <p>Additionally, you can explore some of my open source projects below:</p>
 
-    </p>
-    
     <ol
-      class='list-none w-full my-8 gap-x-4 gap-y-1 !p-0 grid grid-cols-2 max-[500px]:grid-cols-1'>
-        {
+      class="list-none w-full my-8 gap-x-4 gap-y-1 !p-0 grid grid-cols-2 max-[500px]:grid-cols-1"
+    >
+      {
         projects.map((project) => (
-          <li class='!p-0 !h-auto'>
+          <li class="!p-0 !h-auto">
             <ProjectCard data={project} />
           </li>
         ))
       }
     </ol>
 
+    {
+      !!posts.length && (
+        <Section>
+          <p>
+            If you're interested in sharpening your programming skills and
+            discovering insights to become a better programmer, I've got you
+            covered. Here's a sneak peek into my latest 1 blog posts:
+          </p>
+
+          <ol class="!p-0 !m-0 list-none w-full">
+            {sortedPosts.map((post) => (
+              <li
+                class:list={[
+                  "transition-all hover:bg-neutral-800/70 border border-neutral-800/70 hover:border-neutral-600 p-4 rounded-lg w-full inline-flex items-center justify-center",
+                  !post.data.published && "!bg-yellow-950",
+                ]}
+              >
+                <PostCard data={post} />
+              </li>
+            ))}
+          </ol>
+        </Section>
+      )
+    }
   </Section>
 </Document>
