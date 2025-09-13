@@ -30,6 +30,7 @@ export default defineConfig({
           'home-variant',
           'post-outline',
           'downloads',
+          'discord',
           'star']
     }
   }),

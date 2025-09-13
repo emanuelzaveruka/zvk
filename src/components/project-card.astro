@@ -27,12 +27,12 @@ console.log("DEBUG ProjectCard data:", data);
     class='no-underline text-current font-normal h-full'
     rel='noopener noreferrer'>
     <div class='flex flex-col justify-between h-full space-y-2'>
-      <h4 class='!m-0 group-hover:text-cream-light text-center'>{data.prettyName}</h4>
+      <h4 class='!m-0 group-hover:text-blue-light text-center'>{data.prettyName}</h4>
       <span class='text-sm'>{data.description}</span>
       <div class='text-sm'>
         {
           !!data.stars && (
-            <div class='hover:text-cream-light' title={`${data.stars}`}>
+            <div class='hover:text-blue-light' title={`${data.stars}`}>
               <b>{data.stars}</b> <Icon name="mdi:star" class="inline text-yellow-400"/> on github
             </div>
           )

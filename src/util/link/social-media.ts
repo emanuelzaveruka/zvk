@@ -9,17 +9,24 @@ export const SocialMediaLinks: LinkProps[] = [
     icon: 'mdi:github'
   },
   {
-    id: 3,
+    id: 2,
     label: 'LinkedIn',
     title: 'Connect with me on LinkedIn.',
     href: 'https://linkedin.com/in/emanuelzaveruka',
     icon: 'mdi:linkedin'
   },
   {
-    id: 5,
+    id: 3,
     label: 'Mail',
     title: 'Send me an email.',
     href: 'mailto:emanuelzaveruka@gmail.com',
     icon: 'mdi:at'
-  }
+  },
+  {
+    id: 4,
+    label: 'Discord',
+    title: 'Invite for Tech Caligo chat.',
+    href: 'https://discord.gg/fjKvvwbj',
+    icon: 'mdi:discord'
+  },
 ];

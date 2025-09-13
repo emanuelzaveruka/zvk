@@ -7,14 +7,14 @@
     theme: {
       extend: {
         fontFamily: {
-          sans: ['Twemoji Country Flags', ...defaultTheme.fontFamily.sans]
+        sans: ['Poppins', ...defaultTheme.fontFamily.sans],
         },
         colors: {
-          'cream-light': '#F0DBB2',
-          'cream-medium': '#E9D19F'
+          'blue-light': '#F3EFEF',
+          'blue-medium': '#1682FF ',
+          'blue-dark': '#414755 ',
         }
       }
     },
-    plugins: [typographyPlugin],
-    darkMode: 'class'
+    plugins: [typographyPlugin]
   };
