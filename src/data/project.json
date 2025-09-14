@@ -1,18 +1,18 @@
 [
   {
     "owner": "emanuelzaveruka",
-    "name": "cali-commerce",
-    "prettyName": "Cali Commerce",
-    "description": "E-commerce experimental com Next.js e Tailwind.",
-    "stars": 32,
+    "name": "userdept",
+    "prettyName": "User Dept",
+    "description": "Sistema (API REST) de usuários e departamentos em Java com Spring Boot.",
+    "stars": 0,
     "downloads": 0
   },
   {
     "owner": "emanuelzaveruka",
-    "name": "zaid-app",
-    "prettyName": "Zaid App",
-    "description": "App de tradução de áudio em tempo real usando Node e Pub/Sub.",
-    "stars": 18,
-    "downloads": 150
+    "name": "msEmail",
+    "prettyName": "MS Email",
+    "description": "Sistema de gerenciamento de emails em Java com Spring Boot.",
+    "stars": 0,
+    "downloads": 0
   }
 ]
