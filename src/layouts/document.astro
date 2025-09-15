@@ -3,6 +3,7 @@ import Footer from '../components/footer.astro';
 import '../style/global.css';
 import Seo from '../components/seo.astro';
 import type { SeoProps } from '../types/seo-props';
+import MainNav from '../components/main-nav.astro';
 
 interface Props {
   seo?: SeoProps;
@@ -116,7 +117,7 @@ const ldJson = JSON.stringify({
       >
         <slot />
         </main>
-        <!--  {header && <MainNav class={headerClass} />} -->
+        {header && <MainNav class={headerClass} />}
     </div>
     {footer && <Footer />}
   </body>
