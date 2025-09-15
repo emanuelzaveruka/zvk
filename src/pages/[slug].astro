@@ -45,20 +45,6 @@ const { Content } = await post.render();
   <Section class='md'>
     <Content />
   </Section>
-
-  <div id="utterances"></div>
-  <script is:inline>
-    if (typeof window !== "undefined" && !document.querySelector('.utterances-frame')) {
-      const script = document.createElement('script');
-      script.src = 'https://utteranc.es/client.js';
-      script['issue-term'] = 'title';
-      script.label = 'posts';
-      script.theme = 'preferred-color-scheme';
-      script.crossOrigin = 'anonymous';
-      script.async = true;
-      document.getElementById('utterances').appendChild(script);
-    }
-  </script>
 </Document>
 
 <style is:global lang='scss'>
