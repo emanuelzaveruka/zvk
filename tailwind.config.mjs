@@ -8,11 +8,6 @@
       extend: {
         fontFamily: {
         sans: ['Poppins', ...defaultTheme.fontFamily.sans],
-        },
-        colors: {
-          'blue-light': '#F3EFEF',
-          'blue-medium': '#1682FF ',
-          'blue-dark': '#414755 ',
         }
       }
     },

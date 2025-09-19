@@ -26,7 +26,7 @@ interface Props {
           class="transition-all !w-6 !h-6 group-hover:text-cream-light"
         />
         <span
-          class="!text-sm !font-normal transition-all opacity-0 group-hover:opacity-100 absolute left-full ml-2 px-3 py-1 rounded bg-neutral-900 border border-neutral-600"
+          class="!text-sm !font-normal transition-all opacity-0 group-hover:opacity-100 absolute right-full ml-2 px-3 py-1 rounded bg-neutral-900 border border-neutral-600"
         >
           {navLink.label}
         </span>
@@ -36,6 +36,6 @@ interface Props {
 </aside>
 
 <script>
-    import { initMenu } from '../util/time-menu';
+    import { initMenu } from '../util/time-menu.js';
     initMenu("menu");
 </script>

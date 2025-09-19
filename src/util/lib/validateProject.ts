@@ -1,6 +1,6 @@
-import Ajv from "ajv";
-import schema from "../../../.astro/collections/project.schema.json";
-import projects from "../../data/project.json";
+import { Ajv } from "ajv";
+import schema from "../../../.astro/collections/project.schema.json" with { type: "json" };
+import projects from "../../data/project.json" with { type: "json" };
 
 const ajv = new Ajv({ allErrors: true });
 const validate = ajv.compile(schema);
