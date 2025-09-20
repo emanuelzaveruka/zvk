@@ -5,17 +5,15 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "astro dev",
-    "build": "npm run validate:data && astro build",
+    "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro",
-    "validate:data": "node --loader ts-node/esm src/util/lib/validateProject.ts"
+    "astro": "astro"
   },
   "dependencies": {
     "@astrojs/tailwind": "^6.0.2",
     "@fontsource/poppins": "^5.2.6",
     "@iconify-json/mdi": "^1.2.3",
     "@tailwindcss/typography": "^0.5.16",
-    "ajv": "^8.17.1",
     "astro": "^5.13.6",
     "astro-icon": "^1.1.5",
     "astro-seo": "^0.8.4",

@@ -8,6 +8,7 @@
     "target": "ESNext",
     "esModuleInterop": true,
     "allowImportingTsExtensions": true,
+    "allowArbitraryExtensions": true,
     "resolveJsonModule": true,
     "skipLibCheck": true
   }
