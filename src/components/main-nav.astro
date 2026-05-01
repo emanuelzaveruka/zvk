@@ -19,10 +19,12 @@ interface Props {
       <a
         href={navLink.href}
         title={navLink.title}
+        aria-label={navLink.label}
         class="group relative transition-all flex items-center justify-center p-2 rounded-md hover:bg-neutral-800 border border-transparent hover:border-neutral-600"
       >
         <Icon
           name={navLink.icon}
+          aria-hidden="true"
           class="transition-all !w-6 !h-6 group-hover:text-cream-light"
         />
         <span
