@@ -32,7 +32,9 @@ export default defineConfig({
           'post-outline',
           'downloads',
           'discord',
-          'star']
+          'star',
+          'content-copy',
+          'check']
     }
   }),
     tailwind()]
