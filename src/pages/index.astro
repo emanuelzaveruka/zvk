@@ -15,7 +15,7 @@ import ProfileImage from "../components/profile-image.astro";
     <Section class="flex flex-col-reverse md:flex-row items-center md:items-start gap-0 gap-6">
       <div class="flex-1 text-center md:text-left">
         <h1 class="text-left !text-4xl sm:!text-5xl md:!text-7xl !pt-6 md:!pt-10">
-          <span class="text-blue-200">Eai 👋</span> <br/> 
+          <span class="text-blue-200">Eai <span id="wave-hand" class="wave-hand inline-block">👋</span></span> <br/>
           <span>Eu sou </span> <br/>
           <span class="text-blue-100">Emanuel Zaveruka</span>
         </h1>
@@ -87,3 +87,7 @@ import ProfileImage from "../components/profile-image.astro";
     }
   </Section>
 </Document>
+
+<script>
+  import "../util/wave-hand.ts";
+</script>
