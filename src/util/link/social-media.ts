@@ -19,14 +19,14 @@ export const SocialMediaLinks: LinkProps[] = [
     id: 3,
     label: 'Mail',
     title: 'Send me an email.',
-    href: 'mailto:emanuelzaveruka@gmail.com',
+    href: 'mailto:emanuel@emanuelzaveruka.com',
     icon: 'mdi:at'
   },
   {
     id: 4,
     label: 'Discord',
-    title: 'Invite for Tech Caligo chat.',
-    href: 'https://discord.gg/fjKvvwbj',
+    title: 'Invite for ZVK chat.',
+    href: 'https://discord.gg/SCc2Q8aV',
     icon: 'mdi:discord'
   },
 ];
