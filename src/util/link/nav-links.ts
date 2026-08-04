@@ -12,7 +12,7 @@ export const NavLinks: LinkProps[] = [
     id: 2,
     label: 'Posts',
     title: 'View My Posts.',
-    href: '/posts',
+    href: '/blog/',
     icon: 'mdi:post-outline'
   }
 ];

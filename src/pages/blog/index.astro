@@ -1,0 +1,54 @@
+---
+import MainNav from '../../components/main-nav.astro';
+import PostCard from '../../components/post-card.astro';
+import Section from '../../components/section.astro';
+import Document from '../../layouts/document.astro';
+import { sortedPosts, postPath } from '../../util/get-post';
+import { SITE_URL, SITE_LOCALE, SITE_NAME } from '../../util/site';
+
+const schema = {
+  '@type': 'Blog',
+  '@id': `${SITE_URL}/blog/#blog`,
+  url: `${SITE_URL}/blog`,
+  name: `Blog de ${SITE_NAME}`,
+  inLanguage: SITE_LOCALE,
+  publisher: { '@id': `${SITE_URL}/#person` },
+  blogPost: sortedPosts
+    .filter((post) => post.data.published === true)
+    .map((post) => ({
+      '@type': 'BlogPosting',
+      '@id': `${new URL(postPath(post.slug), SITE_URL).toString()}#article`
+    }))
+};
+---
+
+<Document
+  header={false}
+  schema={schema}
+  seo={{
+    title: 'Posts',
+    description:
+      'Posts sobre BDD, mapeamento de processos, diagramas e o uso real de IA no dia a dia de análise de sistemas.',
+    keywords: ['blog', 'bdd', 'processos', 'diagramas', 'ia na prática', 'análise de sistemas'],
+    urlPath: '/blog/'
+  }}>
+  <Section class='flex items-start gap-5'>
+    <h1 class='sr-only'>Posts</h1>
+    {
+      !!sortedPosts.length && (
+        <ol class='!p-0 !m-0 list-none w-full'>
+          {sortedPosts.map((post) => (
+            <li
+              class:list={[
+                'transition-all hover:bg-neutral-800/70 border border-neutral-800/70 hover:border-neutral-600 p-4 rounded-lg w-full block',
+                !post.data.published && '!bg-yellow-950'
+              ]}>
+              <PostCard minimalistic data={post} />
+            </li>
+          ))}
+        </ol>
+      )
+    }
+    <MainNav />
+  </Section>
+</Document>

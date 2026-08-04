@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://emanuelzaveruka.com/sitemap.xml
+Sitemap: https://emanuelzaveruka.com/sitemap-index.xml

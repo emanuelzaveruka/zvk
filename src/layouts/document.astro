@@ -4,6 +4,8 @@ import '../style/global.css';
 import Seo from '../components/seo.astro';
 import type { SeoProps } from '../types/seo-props';
 import MainNav from '../components/main-nav.astro';
+import { SocialMediaLinks } from '../util/link/social-media';
+import { SITE_NAME, SITE_URL, SITE_LOCALE, SITE_EMAIL } from '../util/site';
 
 interface Props {
   seo?: SeoProps;
@@ -13,6 +15,8 @@ interface Props {
   light?: boolean;
   mainClass?: string;
   footer?: boolean;
+  /** Extra JSON-LD node (e.g. a BlogPosting) merged into the page @graph. */
+  schema?: Record<string, unknown>;
 }
 
 const {
@@ -20,31 +24,50 @@ const {
   header = true,
   footer = true,
   light,
+  schema,
   headerClass = '!text-sm !font-normal'
-} = Astro.props;  
+} = Astro.props;
 
-const ldJson = JSON.stringify({
-  '@context': 'http://www.schema.org',
-  '@type': 'person',
-  name: 'Emanuel Zaveruka',
-  jobTitle: 'Web Developer',
-  gender: 'male',
-  url: 'https://emanuelzaveruka.com',
+// `sameAs` links let search engines tie this page to the same real-world entity
+// across profiles, which is what makes the Person node worth emitting at all.
+const profileUrls = SocialMediaLinks.map((link) => link.href).filter((href) =>
+  href.startsWith('http')
+);
+
+const person = {
+  '@type': 'Person',
+  '@id': `${SITE_URL}/#person`,
+  name: SITE_NAME,
+  jobTitle: 'Analista de Sistemas',
+  url: SITE_URL,
+  email: SITE_EMAIL,
   address: {
     '@type': 'PostalAddress',
-    addressLocality: 'Curitiba (PR)',
-    addressRegion: 'Curitiba (PR)',
-    addressCountry: 'Brazil'
+    addressLocality: 'Curitiba',
+    addressRegion: 'PR',
+    addressCountry: 'BR'
   },
-  email: 'emanuel@emanuelzaveruka.com',
-  birthDate: '2003-01-05',
   nationality: 'Brazilian',
-  telephone: '+5541997399754'
+  sameAs: profileUrls
+};
+
+const website = {
+  '@type': 'WebSite',
+  '@id': `${SITE_URL}/#website`,
+  url: SITE_URL,
+  name: SITE_NAME,
+  inLanguage: SITE_LOCALE,
+  publisher: { '@id': `${SITE_URL}/#person` }
+};
+
+const ldJson = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@graph': [person, website, ...(schema ? [schema] : [])]
 });
 ---
 
 <!doctype html>
-<html lang="en" class={light ? "light" : "dark"}>
+<html lang={SITE_LOCALE} class={light ? "light" : "dark"}>
   <head>
     <!-- Simple meta -->
     <meta name="theme-color" content="#000000" />
@@ -58,8 +81,7 @@ const ldJson = JSON.stringify({
     <!-- General SEO -->
     <script is:inline type="application/ld+json" set:html={ldJson} />
     <link rel="manifest" href="/manifest.json" />
-    <meta name="robots" content="index, follow" />
-    
+
     <!-- Icons -->
     <link
       rel="apple-touch-icon"
@@ -91,16 +113,10 @@ const ldJson = JSON.stringify({
       href="/icons/favicon-96x96.png"
     />
 
-    {/* font */}
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+    {/* Poppins is self-hosted through @fontsource in global.css — no external
+        stylesheet round-trip before first paint. */}
 
-    <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&family=Work+Sans:wght@300;500&display=swap"
-      rel="stylesheet"
-    />
-
-     <Seo seo={seo}/> 
+    <Seo seo={seo} />
 
     <slot name="head" />
   </head>

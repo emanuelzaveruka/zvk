@@ -3,14 +3,21 @@ import Section from '../components/section.astro';
 import Document from '../layouts/document.astro';
 ---
 
-<Document header={false}>
+<Document
+  header={false}
+  seo={{
+    title: 'Página não encontrada',
+    description: 'Esta página não existe.',
+    urlPath: '/404',
+    noindex: true
+  }}>
   <Section>
     <h1 class='text-center text-2xl text-red-500'>404</h1>
 
-    <p>The page you are looking for does not exist.</p>
+    <p>Esta página não existe.</p>
 
     <p class='text-center'>
-      <a href='/'>Go back home</a>
+      <a href='/'>Voltar para a home</a> · <a href='/blog/'>Ver os posts</a>
     </p>
   </Section>
 </Document>

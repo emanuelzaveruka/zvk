@@ -1,0 +1,100 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+import Document from '../../layouts/document.astro';
+
+import PostHeader from '../../components/post-header.astro';
+import Section from '../../components/section.astro';
+import { posts, isIndexable, postPath } from '../../util/get-post';
+import { SITE_URL, SITE_LOCALE } from '../../util/site';
+
+export async function getStaticPaths() {
+  // `posts` already drops drafts outside dev, so they never reach the sitemap.
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+    props: post
+  }));
+}
+
+type Props = CollectionEntry<'blog'>;
+
+const post = Astro.props;
+const published = new Date(post.data.date);
+const updated = post.data.updated ? new Date(post.data.updated) : published;
+
+const urlPath = postPath(post.slug);
+const canonical = new URL(urlPath, SITE_URL).toString();
+const imageUrl = post.data.image ? new URL(post.data.image, SITE_URL).toString() : undefined;
+
+const schema = {
+  '@type': 'BlogPosting',
+  '@id': `${canonical}#article`,
+  headline: post.data.title,
+  description: post.data.description,
+  url: canonical,
+  datePublished: published.toISOString(),
+  dateModified: updated.toISOString(),
+  inLanguage: SITE_LOCALE,
+  keywords: post.data.keywords,
+  wordCount: post.body.trim().split(/\s+/).length,
+  author: { '@id': `${SITE_URL}/#person` },
+  publisher: { '@id': `${SITE_URL}/#person` },
+  mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
+  ...(imageUrl && { image: imageUrl })
+};
+
+const { Content } = await post.render();
+---
+
+<Document
+  schema={schema}
+  seo={{
+    title: post.data.title,
+    description: post.data.description,
+    keywords: post.data.keywords,
+    urlPath,
+    imagePath: post.data.image,
+    type: 'article',
+    publishedTime: published.toISOString(),
+    modifiedTime: updated.toISOString(),
+    section: post.data.keywords[0],
+    noindex: !isIndexable(post)
+  }}>
+  <PostHeader date={published} post={post} />
+
+  <Section class='md'>
+    <Content />
+  </Section>
+
+  <nav class='w-full max-w-3xl pb-10 text-center'>
+    <a href='/blog/' rel='up'>&larr; Ver todos os posts</a>
+  </nav>
+</Document>
+
+<style is:global lang='scss'>
+  .md {
+    pre {
+      @apply font-mono p-4 rounded-md;
+      font-family: 'Cascadia Code', Consolas, monaco, monospace !important;
+      font-variant-ligatures: common-ligatures !important;
+    }
+
+    :not(pre) > code {
+      @apply bg-neutral-800 p-1 rounded-md font-normal text-blue-100;
+      font-family: 'Cascadia Code', Consolas, monaco, monospace !important;
+      font-variant-ligatures: common-ligatures !important;
+    }
+
+    a[href] {
+      @apply font-normal no-underline hover:underline;
+    }
+
+    blockquote {
+      @apply font-normal not-italic;
+    }
+
+    img {
+      @apply mx-auto;
+    }
+  }
+</style>

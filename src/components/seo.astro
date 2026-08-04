@@ -1,76 +1,90 @@
 ---
 import { SEO as BaseSEO } from 'astro-seo';
 import type { SeoProps } from '../types/seo-props';
-
+import { SITE_NAME, SITE_URL, SITE_DESCRIPTION } from '../util/site';
 
 interface Props {
-  seo?: SeoProps;    
-  header?: boolean;
-  headerClass?: string;
-  class?: string;
-  light?: boolean;
-  mainClass?: string;
-  footer?: boolean;
+  seo?: SeoProps;
 }
 
 const {
-  baseUrl = 'https://emanuelzaveruka.com',
-  description = 'My place in the internet!',
+  baseUrl = SITE_URL,
+  description = SITE_DESCRIPTION,
   keywords = [
-    'emanuel',
-    'zaveruka',
-    'resume',
-    'portifolio',
-    'personal',
-    'website',
-    'cv',
-    'curriculum',
-    'vitale'
+    'emanuel zaveruka',
+    'análise de sistemas',
+    'engenharia de software',
+    'bdd',
+    'mapeamento de processos',
+    'ia no dia a dia',
+    'portfólio',
+    'blog'
   ],
   urlPath = '/',
-  title = "Emanuel Zaveruka",
-  imagePath = '/images/logo.png'
-} = Astro.props as SeoProps;
+  title = `${SITE_NAME} — Análise de sistemas, processos e IA na prática`,
+  imagePath = '/images/logo.png',
+  type = 'website',
+  publishedTime,
+  modifiedTime,
+  section,
+  noindex = false
+} = Astro.props.seo ?? {};
 
-const fullUrl = baseUrl && urlPath ? new URL(urlPath, baseUrl).toString() : undefined;
-const fullImageUrl = baseUrl && imagePath ? new URL(imagePath, baseUrl).toString() : undefined;
+const fullUrl = new URL(urlPath, baseUrl).toString();
+const fullImageUrl = new URL(imagePath, baseUrl).toString();
+
+// The home page already carries the full name in its title; inner pages get the
+// site suffix so they stay identifiable in search results.
+const pageTitle = urlPath === '/' ? title : `${title} · ${SITE_NAME}`;
 ---
 
 <BaseSEO
-  title={title}
+  title={pageTitle}
   description={description}
   canonical={fullUrl}
+  noindex={noindex}
   openGraph={{
     basic: {
-      title: title ?? '',
-      type: 'website',
-      image: fullImageUrl ?? '',
-      url: fullUrl,
+      title,
+      type,
+      image: fullImageUrl,
+      url: fullUrl
     },
     optional: {
       description,
-      siteName: title,
+      siteName: SITE_NAME,
+      locale: 'pt_BR'
     },
     image: {
       url: fullImageUrl,
-      alt: title,
+      alt: title
     },
+    ...(type === 'article' && {
+      article: {
+        publishedTime,
+        modifiedTime: modifiedTime ?? publishedTime,
+        authors: [SITE_NAME],
+        section,
+        tags: keywords
+      }
+    })
   }}
   twitter={{
     card: 'summary_large_image',
-    title,
+    title: pageTitle,
     description,
     image: fullImageUrl,
-    imageAlt: title,
+    imageAlt: title
   }}
   extend={{
+    link: [{ rel: 'alternate', type: 'application/rss+xml', title: SITE_NAME, href: '/rss.xml' }],
     meta: keywords?.length
       ? [
           {
             name: 'keywords',
-            content: keywords.join(', '),
-          },
+            content: keywords.join(', ')
+          }
         ]
-      : [],
+      : []
   }}
 />
