@@ -8,9 +8,23 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 pnpm dev        # Start local development server
 pnpm build      # Build for production
 pnpm preview    # Preview production build locally
+pnpm check:seo  # Assert the generated HTML in dist/ (run after build)
 ```
 
 No lint or test commands are configured. The package manager is pnpm (enforced at v9.12.0).
+
+### CI
+
+Three workflows in `.github/workflows/`:
+
+- `ci.yml` — pull requests: builds and runs `check:seo`, never deploys
+- `pages.yml` — pushes to `main` (i.e. merges), the daily cron, and manual dispatch: builds, runs `check:seo` as a deploy gate, then publishes to GitHub Pages
+- `codex-review.yml` — pull requests: automated review via `openai/codex-action`, needs an `OPENAI_API_KEY` secret
+
+`scripts/check-seo.mjs` asserts the generated HTML: unique canonicals, one title/robots/description
+per page, `og:type=article` and `BlogPosting` JSON-LD on posts, and that the sitemap lists exactly the
+indexable pages. It exists because the metadata bug it guards against still produced a green build —
+only assertions on the output catch it. It takes an optional dist path: `node scripts/check-seo.mjs <dir>`.
 
 ## Architecture
 

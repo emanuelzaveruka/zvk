@@ -1,0 +1,58 @@
+name: CI
+
+# Dry run for pull requests: builds the site and asserts the generated HTML,
+# but never uploads or deploys. Deployment lives in pages.yml and only happens
+# once a PR is merged into main.
+on:
+  pull_request:
+    branches: ['main']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build and check
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup node and restore cache
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Install packages
+        run: pnpm install --frozen-lockfile
+
+      - name: Build
+        run: pnpm build
+        env:
+          NODE_ENV: production
+
+      - name: Check SEO output
+        run: pnpm check:seo
+
+      - name: Summarise generated routes
+        if: always()
+        run: |
+          {
+            echo '### Generated routes'
+            echo
+            echo '```'
+            find dist -name '*.html' | sed 's|^dist||' | sort
+            echo '```'
+            echo
+            echo "Sitemap URLs: $(grep -c '<loc>' dist/sitemap-0.xml || echo 0)"
+            echo "Feed items:   $(grep -c '<item>' dist/rss.xml || echo 0)"
+          } >> "$GITHUB_STEP_SUMMARY"
