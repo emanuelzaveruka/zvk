@@ -9,6 +9,11 @@ name: Codex review
 #
 # Requires an OPENAI_API_KEY secret:
 #   gh secret set OPENAI_API_KEY --repo emanuelzaveruka/zvk
+#
+# Without that secret the action dies with "Failed to read server info", so the
+# Codex step is skipped when the key is absent. The review is advisory either
+# way: the job is `continue-on-error`, because a review tool being down is not a
+# reason to hold up a merge. The real gate is ci.yml.
 on:
   pull_request:
     types: [opened, reopened, synchronize]
@@ -25,6 +30,8 @@ jobs:
   review:
     name: Review changes
     runs-on: ubuntu-latest
+    # Advisory only — never block the PR on Codex being unavailable.
+    continue-on-error: true
     # Skip drafts, and skip forks — secrets aren't exposed to fork PRs, so the
     # action would fail with an empty API key rather than review anything.
     if: >-
@@ -34,6 +41,10 @@ jobs:
       contents: read
     outputs:
       final_message: ${{ steps.run_codex.outputs.final-message }}
+    # Exposed as env so the steps below can test for it; the `secrets` context
+    # isn't available in a step-level `if`.
+    env:
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
     steps:
       - name: Checkout PR merge commit
         uses: actions/checkout@v5
@@ -50,8 +61,22 @@ jobs:
             "$PR_BASE_REF" \
             "+refs/pull/$PR_NUMBER/head"
 
+      - name: Skip when no API key is configured
+        if: env.OPENAI_API_KEY == ''
+        run: |
+          echo '### 🤖 Codex review skipped' >> "$GITHUB_STEP_SUMMARY"
+          echo >> "$GITHUB_STEP_SUMMARY"
+          echo 'No `OPENAI_API_KEY` secret is set on this repository, so there' >> "$GITHUB_STEP_SUMMARY"
+          echo 'is nothing to review with. Set one with:' >> "$GITHUB_STEP_SUMMARY"
+          echo >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          echo 'gh secret set OPENAI_API_KEY --repo ${{ github.repository }}' >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+
       - name: Run Codex
         id: run_codex
+        if: env.OPENAI_API_KEY != ''
+        continue-on-error: true
         uses: openai/codex-action@v1
         with:
           openai-api-key: ${{ secrets.OPENAI_API_KEY }}
@@ -100,7 +125,10 @@ jobs:
     name: Post review comment
     runs-on: ubuntu-latest
     needs: review
-    if: needs.review.outputs.final_message != ''
+    # `continue-on-error` reports the review job as successful even when Codex
+    # failed, so the message itself is what decides whether there is anything
+    # to post.
+    if: needs.review.result != 'skipped' && needs.review.outputs.final_message != ''
     permissions:
       issues: write
       pull-requests: write
