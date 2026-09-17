@@ -36,7 +36,7 @@ Naquela edição, focamos demais na solução. Gastamos energia construindo e de
 
 Voltei em 2026 querendo corrigir esse erro. Em vários aspectos, corrigimos.
 
-A nova equipe tinha teve uma dinâmica muito melhor. Nathalia Gatt e Isabele Cristina traziam a perspectiva jurídica em conjutno com a Natally Barbosa que trabalhava no problema na narrativa de valor e liderança. Pamela Damazo cuidava da experiência visual, da apresentação dos dados e produziu o protótipo em HTML que depois serviria de referência para o frontend.
+A nova equipe teve uma dinâmica muito melhor. Nathalia Gatt e Isabele Cristina traziam a perspectiva jurídica em conjunto com a Natally Barbosa que trabalhava no problema na narrativa de valor e liderança. Pamela Damazo cuidava da experiência visual, da apresentação dos dados e produziu o protótipo em HTML que depois serviria de referência para o frontend.
 
 Na parte técnica, Felipe Bassetti ficou principalmente com a arquitetura e a integração com o TJPR. Eu trabalhei na interface, integrações e implantação.
 
