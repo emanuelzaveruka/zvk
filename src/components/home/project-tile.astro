@@ -1,0 +1,47 @@
+---
+import { Icon } from 'astro-icon/components';
+import { FOCUS } from './focus';
+
+interface Props {
+  project: {
+    owner: string;
+    name: string;
+    prettyName: string;
+    description: string;
+    summary?: string;
+    tech?: string;
+  };
+}
+
+const { project } = Astro.props;
+
+// The card is one link with nothing interactive nested inside it, so the whole
+// tile is a single tab stop.
+const href = `https://github.com/${project.owner}/${project.name}`;
+---
+
+<a
+  href={href}
+  target="_blank"
+  rel="noopener noreferrer"
+  class:list={[
+    'group flex h-full flex-col gap-3 rounded-xl border border-home-border bg-home-surface p-6 no-underline transition-colors hover:border-home-muted md:p-7',
+    FOCUS
+  ]}>
+  <span class="flex items-center justify-between">
+    <Icon name="mdi:code-braces" aria-hidden="true" class="h-5 w-5 text-home-accent" />
+    <Icon
+      name="mdi:arrow-top-right"
+      aria-hidden="true"
+      class="h-4 w-4 text-home-muted transition-colors group-hover:text-home-accent"
+    />
+  </span>
+
+  <h3 class="m-0 text-lg font-semibold text-home-text">{project.prettyName}</h3>
+
+  <p class="m-0 text-sm leading-relaxed text-home-muted">
+    {project.summary ?? project.description}
+  </p>
+
+  {project.tech && <p class="m-0 mt-auto pt-2 text-sm text-home-muted">{project.tech}</p>}
+</a>

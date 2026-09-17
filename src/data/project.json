@@ -5,7 +5,9 @@
     "prettyName": "User Dept",
     "description": "Sistema (API REST) de usuários e departamentos em Java com Spring Boot.",
     "stars": 0,
-    "downloads": 0
+    "downloads": 0,
+    "tech": "Java / Spring Boot",
+    "summary": "API REST de usuários e departamentos."
   },
   {
     "owner": "emanuelzaveruka",
@@ -13,6 +15,8 @@
     "prettyName": "MS Email",
     "description": "Sistema de gerenciamento de emails em Java com Spring Boot.",
     "stars": 0,
-    "downloads": 0
+    "downloads": 0,
+    "tech": "Java / Spring Boot",
+    "summary": "Microsserviço para envio de e-mails."
   }
 ]

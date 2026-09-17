@@ -1,0 +1,28 @@
+---
+import { SocialMediaLinks } from '../../util/link/social-media';
+import { SITE_NAME } from '../../util/site';
+import { FOCUS } from './focus';
+
+// Contact goes to the address the site already uses, not a new one.
+const contact = SocialMediaLinks.find((link) => link.label === 'Mail')?.href;
+---
+
+<footer class="mx-auto max-w-home px-5 pb-12 md:px-8">
+  <div
+    class="flex flex-col gap-3 border-t border-home-border pt-8 text-sm sm:flex-row sm:items-center sm:justify-between">
+    <span class="text-home-muted">{SITE_NAME}</span>
+
+    {
+      contact && (
+        <a
+          href={contact}
+          class:list={[
+            'inline-flex min-h-[44px] items-center text-home-text no-underline transition-colors hover:text-home-accent sm:min-h-0',
+            FOCUS
+          ]}>
+          Vamos conversar
+        </a>
+      )
+    }
+  </div>
+</footer>

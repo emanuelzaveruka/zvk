@@ -1,0 +1,46 @@
+---
+import { FOCUS } from './focus';
+
+// In-flow header, not a floating bar: the rest of the site keeps the fixed
+// icon nav, this page reads top to bottom. Only destinations that exist are
+// linked — there is no `Sobre` page, so the plan's third link is omitted.
+---
+
+<header class="w-full">
+  <nav
+    aria-label="Navegação principal"
+    class="mx-auto flex max-w-home flex-wrap items-center justify-between gap-x-8 gap-y-3 px-5 py-7 md:px-8">
+    <a
+      href="/"
+      aria-label="Emanuel Zaveruka — início"
+      class:list={[
+        'text-xl font-bold tracking-tight text-home-text no-underline transition-colors hover:text-home-accent',
+        FOCUS
+      ]}>
+      ez<span class="text-home-accent">.</span>
+    </a>
+
+    <ul class="m-0 flex list-none items-center gap-x-7 gap-y-2 p-0 text-sm">
+      <li class="p-0">
+        <a
+          href="#projetos"
+          class:list={[
+            'text-home-muted no-underline transition-colors hover:text-home-text',
+            FOCUS
+          ]}>
+          Projetos
+        </a>
+      </li>
+      <li class="p-0">
+        <a
+          href="#escritos"
+          class:list={[
+            'text-home-muted no-underline transition-colors hover:text-home-text',
+            FOCUS
+          ]}>
+          Escritos
+        </a>
+      </li>
+    </ul>
+  </nav>
+</header>

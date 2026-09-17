@@ -1,0 +1,37 @@
+---
+interface Props {
+  /** Decorative index from the plan (`01`, `02`) — hidden from assistive tech. */
+  index: string;
+  title: string;
+  /** Optional link on the right, rendered only when a real destination exists. */
+  href?: string;
+  linkLabel?: string;
+}
+
+import { FOCUS } from './focus';
+
+const { index, title, href, linkLabel } = Astro.props;
+---
+
+<div
+  class="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2 border-t border-home-border pt-8">
+  <div class="flex items-baseline gap-3">
+    <span aria-hidden="true" class="text-sm font-semibold text-home-accent">{index}</span>
+    <h2 class="m-0 text-2xl font-semibold tracking-tight text-home-text md:text-[1.75rem]">
+      {title}
+    </h2>
+  </div>
+
+  {
+    href && linkLabel && (
+      <a
+        href={href}
+        class:list={[
+          'text-sm text-home-muted no-underline transition-colors hover:text-home-accent',
+          FOCUS
+        ]}>
+        {linkLabel}
+      </a>
+    )
+  }
+</div>

@@ -1,9 +1,28 @@
 ---
 import profile from "../../public/images/profile.jpg";
+
+interface Props {
+  /** Size and shape utilities. The default is the original site sizing. */
+  class?: string;
+  alt?: string;
+}
+
+const {
+  class: className = "w-40 h-40 sm:w-40 sm:h-40 md:w-48 md:h-48 lg:w-96 lg:h-96",
+  alt = "Profile Picture"
+} = Astro.props;
 ---
 
-<div class="flex justify-center items-center bg-sky-200 rounded-full 
-            w-40 h-40 sm:w-40 sm:h-40 md:w-48 md:h-48 lg:w-96 lg:h-96 
-            overflow-hidden">
-  <img src={profile.src} alt="Profile Picture" class="w-full h-full object-cover" />
+<div
+  class:list={[
+    "flex justify-center items-center bg-sky-200 rounded-full overflow-hidden",
+    className
+  ]}>
+  <img
+    src={profile.src}
+    width={profile.width}
+    height={profile.height}
+    alt={alt}
+    class="w-full h-full object-cover"
+  />
 </div>
