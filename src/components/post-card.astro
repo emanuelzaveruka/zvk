@@ -3,6 +3,7 @@ import type { CollectionEntry } from 'astro:content';
 import { getReadTime } from '../util/read-time';
 import MinRead from './min-read.astro';
 import Time from './time.astro';
+import { postPath } from '../util/get-post';
 
 interface Props {
   data: CollectionEntry<'blog'>;
@@ -16,7 +17,7 @@ const {
 ---
 
 <a
-  href={`/${slug}`}
+  href={postPath(slug)}
   title={post.description}
   aria-label={post.title}
   class:list={[

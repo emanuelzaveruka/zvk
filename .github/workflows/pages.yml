@@ -1,5 +1,8 @@
 name: Deploy static content to Pages
 
+# Real deploy. Runs on merges into main (a merge is a push), on the daily
+# schedule, and on demand. Pull requests are handled by ci.yml, which builds
+# without deploying.
 on:
   push:
     branches: ['main']
@@ -14,7 +17,9 @@ permissions:
 
 concurrency:
   group: 'pages'
-  cancel-in-progress: true
+  # Don't cancel a deploy midway — an interrupted one can leave Pages serving
+  # a half-published state. Queue instead.
+  cancel-in-progress: false
 
 jobs:
   deploy:
@@ -32,28 +37,21 @@ jobs:
       - name: Setup node and restore cache
         uses: actions/setup-node@v4
         with:
-          node-version-file: .nvmrc
           node-version: 20
           cache: 'pnpm'
 
-      - name: Restore puppeteer install
-        uses: actions/cache@v4
-        with:
-          path: ~/.cache/puppeteer
-          key: ${{ runner.os }}-puppeteer
-
       - name: Install packages
         run: pnpm install --frozen-lockfile
-
-      - name: Install chrome
-        run: pnpm puppeteer browsers install chrome
 
       - name: Build
         run: pnpm build
         env:
           NODE_ENV: production
-          # mapeia o token padrão do Actions (não precisa criar secret)
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # Gate the deploy on the same assertions CI runs, so broken metadata
+      # can't reach production even via the schedule or a direct push.
+      - name: Check SEO output
+        run: pnpm check:seo
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

@@ -4,13 +4,31 @@ import { defineConfig } from 'astro/config';
 import tailwind from '@astrojs/tailwind';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import rehypeSlug from 'rehype-slug';
+import rehypePostImages from './src/util/lib/rehype-post-images';
 import icon from "astro-icon";
+import sitemap from '@astrojs/sitemap';
 
 // https://astro.build/config
 export default defineConfig({
     site: 'https://emanuelzaveruka.com',
+    trailingSlash: 'ignore',
+    // Posts moved from /<slug> to /blog/<slug>; these keep the old URLs alive.
+    // GitHub Pages can't issue real 301s, so Astro emits meta-refresh pages,
+    // which search engines still follow and consolidate.
+    redirects: {
+      '/posts': '/blog/',
+      '/aplicando-bdd-20-no-dia-a-dia-ganhos-e-contras':
+        '/blog/aplicando-bdd-2-0-no-dia-a-dia-ganhos-e-contras/',
+      '/ferramentas-que-utilizo-para-construção-de-diagramas':
+        '/blog/ferramentas-para-construcao-de-diagramas/'
+    },
     markdown: {
-    rehypePlugins: [rehypeSlug, [rehypeAutolinkHeadings, { behavior: 'wrap' }]],
+    rehypePlugins: [
+      rehypeSlug,
+      [rehypeAutolinkHeadings, { behavior: 'wrap' }],
+      // Markdown images become <figure> + <figcaption>, with intrinsic sizes.
+      rehypePostImages
+    ],
     shikiConfig: {
       wrap: true,
       theme: 'vitesse-dark'
@@ -37,5 +55,13 @@ export default defineConfig({
           'check']
     }
   }),
+    sitemap({
+      i18n: { defaultLocale: 'pt', locales: { pt: 'pt-BR' } },
+      // Redirect stubs and the 404 must stay out of the sitemap.
+      filter: (page) =>
+        !['/posts/', '/aplicando-bdd-20-no-dia-a-dia-ganhos-e-contras/'].some((path) =>
+          page.endsWith(path)
+        ) && !decodeURIComponent(page).includes('construção')
+    }),
     tailwind()]
 });
