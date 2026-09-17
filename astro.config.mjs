@@ -4,6 +4,7 @@ import { defineConfig } from 'astro/config';
 import tailwind from '@astrojs/tailwind';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import rehypeSlug from 'rehype-slug';
+import rehypePostImages from './src/util/lib/rehype-post-images';
 import icon from "astro-icon";
 import sitemap from '@astrojs/sitemap';
 
@@ -22,7 +23,12 @@ export default defineConfig({
         '/blog/ferramentas-para-construcao-de-diagramas/'
     },
     markdown: {
-    rehypePlugins: [rehypeSlug, [rehypeAutolinkHeadings, { behavior: 'wrap' }]],
+    rehypePlugins: [
+      rehypeSlug,
+      [rehypeAutolinkHeadings, { behavior: 'wrap' }],
+      // Markdown images become <figure> + <figcaption>, with intrinsic sizes.
+      rehypePostImages
+    ],
     shikiConfig: {
       wrap: true,
       theme: 'vitesse-dark'

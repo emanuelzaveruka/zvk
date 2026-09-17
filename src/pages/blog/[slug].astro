@@ -6,6 +6,7 @@ import Document from '../../layouts/document.astro';
 import PostHeader from '../../components/post-header.astro';
 import Section from '../../components/section.astro';
 import { posts, isIndexable, postPath } from '../../util/get-post';
+import { ogImage } from '../../util/og-image';
 import { SITE_URL, SITE_LOCALE } from '../../util/site';
 
 export async function getStaticPaths() {
@@ -24,7 +25,11 @@ const updated = post.data.updated ? new Date(post.data.updated) : published;
 
 const urlPath = postPath(post.slug);
 const canonical = new URL(urlPath, SITE_URL).toString();
-const imageUrl = post.data.image ? new URL(post.data.image, SITE_URL).toString() : undefined;
+
+// The share card is the 1200x630 derivative when one has been generated for
+// this slug; the post's own illustration is the fallback.
+const sharePath = ogImage(post.slug) ?? post.data.image;
+const imageUrl = sharePath ? new URL(sharePath, SITE_URL).toString() : undefined;
 
 const schema = {
   '@type': 'BlogPosting',
@@ -53,7 +58,8 @@ const { Content } = await post.render();
     description: post.data.description,
     keywords: post.data.keywords,
     urlPath,
-    imagePath: post.data.image,
+    imagePath: sharePath,
+    imageAlt: post.data.title,
     type: 'article',
     publishedTime: published.toISOString(),
     modifiedTime: updated.toISOString(),
@@ -94,7 +100,21 @@ const { Content } = await post.render();
     }
 
     img {
-      @apply mx-auto;
+      @apply mx-auto h-auto max-w-full;
+    }
+
+    /* Illustrations: `![alt](/images/... 'Caption')` becomes figure + caption
+       through the rehype plugin, so captions read as captions and not prose. */
+    figure {
+      @apply my-10;
+
+      img {
+        @apply rounded-lg border border-neutral-800 w-full;
+      }
+
+      figcaption {
+        @apply text-center text-sm not-italic text-neutral-400 mt-3;
+      }
     }
   }
 </style>

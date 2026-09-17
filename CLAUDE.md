@@ -9,6 +9,7 @@ pnpm dev        # Start local development server
 pnpm build      # Build for production
 pnpm preview    # Preview production build locally
 pnpm check:seo  # Assert the generated HTML in dist/ (run after build)
+pnpm images:og  # Regenerate the social share cards in public/images/og/
 ```
 
 No lint or test commands are configured. The package manager is pnpm (enforced at v9.12.0).
@@ -63,7 +64,7 @@ must use `posts` (never a raw `getCollection`) so drafts don't get built in prod
 Set `updated` when revising a published post — it drives `dateModified` and `article:modified_time`.
 
 Keep filenames ASCII: the filename becomes the slug, and accented characters produce
-percent-encoded URLs.
+percent-encoded URLs. The same goes for image files.
 
 ### Data
 
@@ -93,6 +94,29 @@ references the person by `@id` (`/#person`) instead of repeating the author deta
 
 `@astrojs/sitemap` generates `/sitemap-index.xml` (referenced from `public/robots.txt`); its `filter`
 in `astro.config.mjs` excludes the redirect stubs.
+
+### Images
+
+Post illustrations live in `public/images/<post>/` and are referenced with a site-absolute
+path. `src/util/lib/rehype-post-images.ts` rewrites every Markdown image into a `<figure>`,
+turning the optional Markdown title into a `<figcaption>` and stamping the intrinsic size
+onto the tag so the browser reserves the space before the file arrives:
+
+```md
+![alt text](/images/post/thing.png 'Caption shown under the image')
+```
+
+Share cards are derived files, never the illustration itself: a post image can be square or
+several megabytes, and WhatsApp drops previews over ~300 KB while X and LinkedIn crop
+anything far from 1.91:1. `pnpm images:og` renders a 1200x630 JPEG under that budget to
+`public/images/og/<slug>.jpg` for every post (plus `site.jpg`, the fallback for every other
+page), and `src/util/og-image.ts` resolves it by slug — no frontmatter involved. Run it after
+adding or replacing a post image and commit the output; the cards are checked in.
+
+`check:seo` fails the build when a page's `og:image` is missing, absent from `dist/`, over the
+preview budget, or missing its `width`/`height`/`type` tags — without those most platforms
+downgrade the card to a thumbnail. Dimensions come from `src/util/image-meta.ts`, which reads
+PNG/JPEG/WebP/GIF headers at build time and returns `undefined` for anything else.
 
 ### Styling
 

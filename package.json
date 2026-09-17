@@ -8,6 +8,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "check:seo": "node scripts/check-seo.mjs",
+    "images:og": "node scripts/build-og-images.mjs",
     "astro": "astro"
   },
   "dependencies": {
@@ -28,6 +29,7 @@
     "@types/node": "^24.4.0",
     "puppeteer": "^24.22.0",
     "sass-embedded": "^1.92.1",
+    "sharp": "^0.35.4",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.2"
   }

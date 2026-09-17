@@ -2,6 +2,8 @@
 import { SEO as BaseSEO } from 'astro-seo';
 import type { SeoProps } from '../types/seo-props';
 import { SITE_NAME, SITE_URL, SITE_DESCRIPTION } from '../util/site';
+import { getImageMeta } from '../util/image-meta';
+import { DEFAULT_OG_IMAGE } from '../util/og-image';
 
 interface Props {
   seo?: SeoProps;
@@ -22,7 +24,8 @@ const {
   ],
   urlPath = '/',
   title = `${SITE_NAME} — Análise de sistemas, processos e IA na prática`,
-  imagePath = '/images/logo.png',
+  imagePath = DEFAULT_OG_IMAGE,
+  imageAlt,
   type = 'website',
   publishedTime,
   modifiedTime,
@@ -32,6 +35,12 @@ const {
 
 const fullUrl = new URL(urlPath, baseUrl).toString();
 const fullImageUrl = new URL(imagePath, baseUrl).toString();
+
+// Crawlers size the card from these tags before fetching the file; without
+// them WhatsApp, LinkedIn and Slack fall back to a small thumbnail — or to no
+// image at all.
+const imageMeta = getImageMeta(imagePath);
+const imageDescription = imageAlt ?? title;
 
 // The home page already carries the full name in its title; inner pages get the
 // site suffix so they stay identifiable in search results.
@@ -57,7 +66,13 @@ const pageTitle = urlPath === '/' ? title : `${title} · ${SITE_NAME}`;
     },
     image: {
       url: fullImageUrl,
-      alt: title
+      secureUrl: fullImageUrl,
+      alt: imageDescription,
+      ...(imageMeta && {
+        type: imageMeta.type,
+        width: imageMeta.width,
+        height: imageMeta.height
+      })
     },
     ...(type === 'article' && {
       article: {
@@ -74,7 +89,7 @@ const pageTitle = urlPath === '/' ? title : `${title} · ${SITE_NAME}`;
     title: pageTitle,
     description,
     image: fullImageUrl,
-    imageAlt: title
+    imageAlt: imageDescription
   }}
   extend={{
     link: [{ rel: 'alternate', type: 'application/rss+xml', title: SITE_NAME, href: '/rss.xml' }],

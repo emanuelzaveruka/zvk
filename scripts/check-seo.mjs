@@ -8,10 +8,12 @@
  *
  * Run with `pnpm check:seo` after `pnpm build`.
  */
-import { readFileSync, readdirSync, existsSync } from 'node:fs';
+import { readFileSync, readdirSync, existsSync, statSync } from 'node:fs';
 import { join, relative } from 'node:path';
 
 const DIST = process.argv[2] ?? 'dist';
+/** WhatsApp drops link previews whose image is larger than this. */
+const MAX_SHARE_IMAGE_BYTES = 300 * 1024;
 const failures = [];
 const fail = (msg) => failures.push(msg);
 
@@ -83,6 +85,39 @@ for (const file of pages) {
     const claimed = canonicals.get(canonical.value) ?? [];
     claimed.push(page);
     canonicals.set(canonical.value, claimed);
+  }
+
+  // --- Share card: the tags a crawler reads before deciding to render one ---
+  const ogImage = one(head, /<meta property="og:image" content="([^"]*)"/g);
+
+  if (ogImage.count !== 1) {
+    fail(`${page}: expected 1 og:image in <head>, found ${ogImage.count}`);
+  } else {
+    const url = ogImage.value;
+
+    if (!/^https?:\/\//.test(url)) {
+      fail(`${page}: og:image must be an absolute URL, got ${url}`);
+    } else {
+      // Dimensions let the platform lay the card out before the file arrives;
+      // without them the preview often degrades to a small thumbnail.
+      for (const tag of ['og:image:width', 'og:image:height', 'og:image:type']) {
+        if (!new RegExp(`<meta property="${tag}" content="[^"]+"`).test(head)) {
+          fail(`${page}: share image is missing ${tag}`);
+        }
+      }
+
+      const file = join(DIST, decodeURIComponent(new URL(url).pathname));
+
+      if (!existsSync(file)) {
+        fail(`${page}: og:image ${url} is not in the build`);
+      } else if (statSync(file).size > MAX_SHARE_IMAGE_BYTES) {
+        const kb = (statSync(file).size / 1024).toFixed(0);
+        fail(
+          `${page}: og:image is ${kb} KB, over the ${MAX_SHARE_IMAGE_BYTES / 1024} KB preview ` +
+            'budget — regenerate it with `pnpm images:og`'
+        );
+      }
+    }
   }
 
   // Article-specific tags must land in <head>, where crawlers read them.
