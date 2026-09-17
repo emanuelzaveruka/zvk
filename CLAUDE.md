@@ -16,11 +16,17 @@ No lint or test commands are configured. The package manager is pnpm (enforced a
 
 ### CI
 
-Three workflows in `.github/workflows/`:
+Two workflows in `.github/workflows/`:
 
 - `ci.yml` — pull requests: builds and runs `check:seo`, never deploys
 - `pages.yml` — pushes to `main` (i.e. merges), the daily cron, and manual dispatch: builds, runs `check:seo` as a deploy gate, then publishes to GitHub Pages
-- `codex-review.yml` — pull requests: automated review via `openai/codex-action`, needs an `OPENAI_API_KEY` secret
+
+Automated PR review is Codex code review, enabled from
+[chatgpt.com/codex/settings/code-review](https://chatgpt.com/codex/settings/code-review)
+on the ChatGPT plan — it runs in OpenAI's cloud, not in Actions, and takes its
+review rules from `AGENTS.md`. There is deliberately no review workflow in this
+repo: the `openai/codex-action` route needs a billed `OPENAI_API_KEY`, and the
+API-key track has no access to the cloud review feature.
 
 `scripts/check-seo.mjs` asserts the generated HTML: unique canonicals, one title/robots/description
 per page, `og:type=article` and `BlogPosting` JSON-LD on posts, and that the sitemap lists exactly the
