@@ -31,17 +31,17 @@ const minutes = getReadTime(post.body);
 <a
   href={postPath(post.slug)}
   class:list={[
-    'group flex items-center justify-between gap-6 border-t border-home-border py-6 no-underline',
+    'group flex items-center justify-between gap-6 border-t border-home-border pb-4 pt-4 no-underline',
     FOCUS
   ]}>
-  <span class="flex flex-col gap-2">
+  <span class="flex flex-col gap-0.5">
     <span class="text-sm text-home-muted">
       <time datetime={date.toISOString()}>{formatted}</time>
       {minutes > 0 && <span>· {minutes} min de leitura</span>}
     </span>
 
     <span
-      class="text-lg font-medium leading-snug text-home-text transition-colors group-hover:text-home-accent md:text-xl">
+      class="text-[1.3125rem] font-medium leading-snug text-home-text transition-colors group-hover:text-home-accent">
       {post.data.title}
     </span>
   </span>

@@ -26,7 +26,7 @@
           }
         },
         maxWidth: {
-          home: '880px'
+          home: '928px'
         }
       }
     },

@@ -26,10 +26,10 @@ const href = `https://github.com/${project.owner}/${project.name}`;
   target="_blank"
   rel="noopener noreferrer"
   class:list={[
-    'group flex h-full flex-col rounded-xl border border-home-border bg-home-surface p-6 no-underline transition-colors hover:border-home-muted md:p-7',
+    'group flex h-full flex-col rounded-xl border border-home-border bg-home-surface p-6 pb-5 no-underline transition-colors hover:border-home-muted',
     FOCUS
   ]}>
-  <span class="mb-6 flex items-start justify-between">
+  <span class="mb-3 flex items-start justify-between">
     <Icon
       name={project.icon ?? 'mdi:code-braces'}
       aria-hidden="true"
@@ -50,7 +50,7 @@ const href = `https://github.com/${project.owner}/${project.name}`;
 
   {
     project.tech && (
-      <p class="m-0 mt-6 border-t border-home-border pt-4 text-sm text-home-muted">
+      <p class="m-0 mt-3 border-t border-home-border pt-3 text-sm text-home-muted">
         {project.tech}
       </p>
     )

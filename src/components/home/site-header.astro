@@ -1,8 +1,7 @@
 ---
 import { FOCUS } from './focus';
 
-// In-flow header, not a floating bar: the rest of the site keeps the fixed
-// icon nav, this page reads top to bottom.
+// Measured off the reference: brand ink at y45, nav gaps of ~35px.
 const links = [
   { label: 'Projetos', href: '#projetos' },
   { label: 'Escritos', href: '#escritos' },
@@ -13,18 +12,18 @@ const links = [
 <header class="w-full">
   <nav
     aria-label="Navegação principal"
-    class="mx-auto flex max-w-home flex-wrap items-center justify-between gap-x-8 gap-y-3 px-5 py-8 md:px-8">
+    class="mx-auto flex max-w-home flex-wrap items-center justify-between gap-x-8 gap-y-3 px-5 pb-[38px] pt-9 md:px-8">
     <a
       href="/"
       aria-label="Emanuel Zaveruka — início"
       class:list={[
-        'text-2xl font-extrabold tracking-tight text-home-text no-underline transition-colors hover:text-home-accent',
+        'text-[1.875rem] font-extrabold leading-none tracking-tight text-home-text no-underline transition-colors hover:text-home-accent',
         FOCUS
       ]}>
       ez<span class="text-home-accent">.</span>
     </a>
 
-    <ul class="m-0 flex list-none items-center gap-x-8 gap-y-2 p-0 text-sm">
+    <ul class="m-0 flex list-none items-center gap-x-9 gap-y-2 p-0 text-[0.9375rem]">
       {
         links.map((link) => (
           <li class="p-0">

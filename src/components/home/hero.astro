@@ -4,8 +4,9 @@ import ProfileImage from '../profile-image.astro';
 import { SocialMediaLinks } from '../../util/link/social-media';
 import { FOCUS } from './focus';
 
-// The three destinations the mockup shows, pulled from the site's real link
-// list rather than retyped. Discord stays out of the redesigned home.
+// Type sizes and gaps are measured off the reference render: name cap height
+// 67px (≈92px type) on a 74px line, one-line lead sentence at 500px, social
+// row 32px under a 48px button.
 const LABELS: Record<string, string> = {
   Github: 'GitHub',
   LinkedIn: 'LinkedIn',
@@ -18,30 +19,31 @@ const social = Object.keys(LABELS)
 ---
 
 <section
-  class="mx-auto flex max-w-home flex-col-reverse gap-10 px-5 pb-16 pt-2 md:px-8 lg:flex-row lg:items-start lg:justify-between lg:gap-12 lg:pb-24">
-  <div class="lg:max-w-xl">
-    <p class="m-0 text-xs uppercase tracking-[0.2em] text-home-muted md:text-[0.8125rem]">
+  class="mx-auto flex max-w-home flex-col-reverse gap-10 px-5 pb-5 pt-7 md:px-8 lg:flex-row lg:items-start lg:justify-between lg:gap-8">
+  <div class="lg:max-w-[540px]">
+    <p class="m-0 text-[0.85rem] uppercase tracking-[0.2em] text-home-muted">
       Desenvolvedor &amp; analista de sistemas
     </p>
 
     <h1
-      class="mb-5 mt-4 text-[clamp(3rem,9vw,5.5rem)] font-extrabold leading-[0.98] tracking-[-0.02em] text-home-text">
+      class="mb-6 mt-3 text-[clamp(3rem,7.4vw,5.75rem)] font-extrabold leading-[0.8] tracking-[-0.025em] text-home-text">
       Emanuel<br /><span class="text-home-accent">Zaveruka.</span>
     </h1>
 
-    <p class="m-0 text-[1.375rem] font-medium leading-snug text-home-text md:text-[1.75rem]">
+    <p
+      class="m-0 max-w-[540px] text-[1.5rem] font-medium leading-snug tracking-[-0.01em] text-home-text md:text-[1.75rem]">
       Conecto processos, sistemas e dados.
     </p>
 
-    <p class="mb-9 mt-3 max-w-md text-base leading-relaxed text-home-muted md:text-lg">
+    <p class="m-0 mt-2 max-w-[430px] text-[1.1875rem] leading-[1.4] text-home-muted">
       Desenvolvimento, integrações e automação para resolver problemas reais.
     </p>
 
-    <div class="flex flex-wrap items-center gap-x-8 gap-y-4">
+    <div class="mt-6 flex flex-wrap items-center gap-x-8 gap-y-4">
       <a
         href="#projetos"
         class:list={[
-          'inline-flex min-h-[44px] items-center rounded-md bg-home-accent px-6 py-3 font-semibold text-home-on-accent no-underline transition-colors hover:bg-[#c2daff]',
+          'inline-flex h-12 items-center rounded-md bg-home-accent px-6 font-semibold text-home-on-accent no-underline transition-colors hover:bg-[#c2daff]',
           FOCUS
         ]}>
         Ver projetos
@@ -50,7 +52,7 @@ const social = Object.keys(LABELS)
       <a
         href="/sobre/"
         class:list={[
-          'group inline-flex min-h-[44px] items-center gap-2 text-home-text no-underline transition-colors hover:text-home-accent',
+          'group inline-flex items-center gap-3 text-home-text no-underline transition-colors hover:text-home-accent',
           FOCUS
         ]}>
         Sobre mim
@@ -62,14 +64,14 @@ const social = Object.keys(LABELS)
       </a>
     </div>
 
-    <ul class="m-0 mt-7 flex list-none flex-wrap items-center gap-x-8 gap-y-2 p-0 text-sm">
+    <ul class="m-0 mt-7 flex list-none flex-wrap items-center gap-x-8 gap-y-3 p-0 text-[0.9375rem]">
       {
         social.map((link) => (
           <li class="p-0">
             <a
               href={link.href}
               class:list={[
-                'group inline-flex min-h-[44px] items-center gap-1.5 text-home-text no-underline transition-colors hover:text-home-accent',
+                'group inline-flex items-center gap-2 text-home-text no-underline transition-colors hover:text-home-accent',
                 FOCUS
               ]}>
               {LABELS[link.label]}
@@ -85,7 +87,7 @@ const social = Object.keys(LABELS)
     </ul>
   </div>
 
-  <div class="flex justify-center lg:mt-2 lg:justify-end">
+  <div class="flex justify-center lg:mr-4 lg:mt-[15px] lg:justify-end">
     <ProfileImage
       class="h-36 w-36 md:h-44 md:w-44 lg:h-[17.5rem] lg:w-[17.5rem]"
       alt="Retrato de Emanuel Zaveruka"
