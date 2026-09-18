@@ -10,6 +10,7 @@ interface Props {
     description: string;
     summary?: string;
     tech?: string;
+    icon?: string;
   };
 }
 
@@ -25,11 +26,15 @@ const href = `https://github.com/${project.owner}/${project.name}`;
   target="_blank"
   rel="noopener noreferrer"
   class:list={[
-    'group flex h-full flex-col gap-3 rounded-xl border border-home-border bg-home-surface p-6 no-underline transition-colors hover:border-home-muted md:p-7',
+    'group flex h-full flex-col rounded-xl border border-home-border bg-home-surface p-6 no-underline transition-colors hover:border-home-muted md:p-7',
     FOCUS
   ]}>
-  <span class="flex items-center justify-between">
-    <Icon name="mdi:code-braces" aria-hidden="true" class="h-5 w-5 text-home-accent" />
+  <span class="mb-6 flex items-start justify-between">
+    <Icon
+      name={project.icon ?? 'mdi:code-braces'}
+      aria-hidden="true"
+      class="h-7 w-7 text-home-accent"
+    />
     <Icon
       name="mdi:arrow-top-right"
       aria-hidden="true"
@@ -37,11 +42,17 @@ const href = `https://github.com/${project.owner}/${project.name}`;
     />
   </span>
 
-  <h3 class="m-0 text-lg font-semibold text-home-text">{project.prettyName}</h3>
+  <h3 class="m-0 text-lg font-bold text-home-text">{project.prettyName}</h3>
 
-  <p class="m-0 text-sm leading-relaxed text-home-muted">
+  <p class="m-0 mt-2 text-sm leading-relaxed text-home-muted">
     {project.summary ?? project.description}
   </p>
 
-  {project.tech && <p class="m-0 mt-auto pt-2 text-sm text-home-muted">{project.tech}</p>}
+  {
+    project.tech && (
+      <p class="m-0 mt-6 border-t border-home-border pt-4 text-sm text-home-muted">
+        {project.tech}
+      </p>
+    )
+  }
 </a>

@@ -55,7 +55,8 @@ export default defineConfig({
           'check',
           'arrow-right',
           'arrow-top-right',
-          'code-braces']
+          'code-braces',
+          'email-outline']
     }
   }),
     sitemap({

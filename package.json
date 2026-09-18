@@ -15,6 +15,7 @@
     "@astrojs/rss": "^4.0.19",
     "@astrojs/sitemap": "^3.7.3",
     "@astrojs/tailwind": "^6.0.2",
+    "@fontsource/inter": "^5.3.0",
     "@fontsource/poppins": "^5.2.6",
     "@iconify-json/mdi": "^1.2.3",
     "@tailwindcss/typography": "^0.5.16",

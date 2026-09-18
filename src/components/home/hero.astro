@@ -4,7 +4,7 @@ import ProfileImage from '../profile-image.astro';
 import { SocialMediaLinks } from '../../util/link/social-media';
 import { FOCUS } from './focus';
 
-// The three destinations the plan asks for, pulled from the site's real link
+// The three destinations the mockup shows, pulled from the site's real link
 // list rather than retyped. Discord stays out of the redesigned home.
 const LABELS: Record<string, string> = {
   Github: 'GitHub',
@@ -18,26 +18,26 @@ const social = Object.keys(LABELS)
 ---
 
 <section
-  class="mx-auto flex max-w-home flex-col-reverse gap-10 px-5 pb-12 pt-4 md:px-8 lg:flex-row lg:items-center lg:justify-between lg:gap-16 lg:pb-24">
-  <div class="lg:max-w-2xl">
-    <p class="m-0 text-sm uppercase tracking-[0.18em] text-home-muted">
+  class="mx-auto flex max-w-home flex-col-reverse gap-10 px-5 pb-16 pt-2 md:px-8 lg:flex-row lg:items-start lg:justify-between lg:gap-12 lg:pb-24">
+  <div class="lg:max-w-xl">
+    <p class="m-0 text-xs uppercase tracking-[0.2em] text-home-muted md:text-[0.8125rem]">
       Desenvolvedor &amp; analista de sistemas
     </p>
 
     <h1
-      class="mb-6 mt-4 text-[clamp(3rem,9vw,5.5rem)] font-extrabold leading-[1.02] tracking-tight text-home-text">
+      class="mb-5 mt-4 text-[clamp(3rem,9vw,5.5rem)] font-extrabold leading-[0.98] tracking-[-0.02em] text-home-text">
       Emanuel<br /><span class="text-home-accent">Zaveruka.</span>
     </h1>
 
-    <p class="m-0 text-[1.375rem] leading-snug text-home-text md:text-[1.75rem]">
+    <p class="m-0 text-[1.375rem] font-medium leading-snug text-home-text md:text-[1.75rem]">
       Conecto processos, sistemas e dados.
     </p>
 
-    <p class="mb-9 mt-4 max-w-xl text-base leading-relaxed text-home-muted md:text-lg">
+    <p class="mb-9 mt-3 max-w-md text-base leading-relaxed text-home-muted md:text-lg">
       Desenvolvimento, integrações e automação para resolver problemas reais.
     </p>
 
-    <div class="flex flex-wrap items-center gap-x-8 gap-y-5">
+    <div class="flex flex-wrap items-center gap-x-8 gap-y-4">
       <a
         href="#projetos"
         class:list={[
@@ -47,29 +47,47 @@ const social = Object.keys(LABELS)
         Ver projetos
       </a>
 
-      <ul class="m-0 flex list-none flex-wrap items-center gap-x-6 gap-y-3 p-0 text-sm">
-        {
-          social.map((link) => (
-            <li class="p-0">
-              <a
-                href={link.href}
-                class:list={[
-                  'inline-flex min-h-[44px] items-center gap-2 text-home-muted no-underline transition-colors hover:text-home-accent',
-                  FOCUS
-                ]}>
-                <Icon name={link.icon} aria-hidden="true" class="h-[1.05rem] w-[1.05rem]" />
-                {LABELS[link.label]}
-              </a>
-            </li>
-          ))
-        }
-      </ul>
+      <a
+        href="/sobre/"
+        class:list={[
+          'group inline-flex min-h-[44px] items-center gap-2 text-home-text no-underline transition-colors hover:text-home-accent',
+          FOCUS
+        ]}>
+        Sobre mim
+        <Icon
+          name="mdi:arrow-right"
+          aria-hidden="true"
+          class="h-4 w-4 text-home-muted transition-colors group-hover:text-home-accent"
+        />
+      </a>
     </div>
+
+    <ul class="m-0 mt-7 flex list-none flex-wrap items-center gap-x-8 gap-y-2 p-0 text-sm">
+      {
+        social.map((link) => (
+          <li class="p-0">
+            <a
+              href={link.href}
+              class:list={[
+                'group inline-flex min-h-[44px] items-center gap-1.5 text-home-text no-underline transition-colors hover:text-home-accent',
+                FOCUS
+              ]}>
+              {LABELS[link.label]}
+              <Icon
+                name="mdi:arrow-top-right"
+                aria-hidden="true"
+                class="h-3.5 w-3.5 text-home-muted transition-colors group-hover:text-home-accent"
+              />
+            </a>
+          </li>
+        ))
+      }
+    </ul>
   </div>
 
-  <div class="flex justify-center lg:justify-end">
+  <div class="flex justify-center lg:mt-2 lg:justify-end">
     <ProfileImage
-      class="h-32 w-32 md:h-40 md:w-40 lg:h-64 lg:w-64"
+      class="h-36 w-36 md:h-44 md:w-44 lg:h-[17.5rem] lg:w-[17.5rem]"
       alt="Retrato de Emanuel Zaveruka"
     />
   </div>

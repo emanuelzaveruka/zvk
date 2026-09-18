@@ -8,6 +8,8 @@
       extend: {
         fontFamily: {
         sans: ['Poppins', ...defaultTheme.fontFamily.sans],
+        // Applied only on the home, via `font-grotesk` on the body.
+        grotesk: ['Inter', ...defaultTheme.fontFamily.sans],
         },
         // Palette for the redesigned home only. Namespaced on purpose: the rest
         // of the site keeps using Tailwind's `neutral-*`, so these tokens can't
@@ -24,7 +26,7 @@
           }
         },
         maxWidth: {
-          home: '1040px'
+          home: '880px'
         }
       }
     },
