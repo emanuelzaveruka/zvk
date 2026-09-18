@@ -37,8 +37,8 @@ const {
 
 // `sameAs` links let search engines tie this page to the same real-world entity
 // across profiles, which is what makes the Person node worth emitting at all.
-const profileUrls = SocialMediaLinks.map((link) => link.href).filter((href) =>
-  href.startsWith('http')
+const profileUrls = SocialMediaLinks.map((link) => link.href).filter(
+  (href) => href.startsWith('http') && !href.includes('wa.me')
 );
 
 const person = {

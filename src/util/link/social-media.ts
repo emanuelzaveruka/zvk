@@ -24,6 +24,14 @@ export const SocialMediaLinks: LinkProps[] = [
   },
   {
     id: 4,
+    label: 'WhatsApp',
+    title: 'Fale comigo no WhatsApp.',
+    // wa.me exige só dígitos, com país e DDD.
+    href: 'https://wa.me/5541997399754',
+    icon: 'mdi:whatsapp'
+  },
+  {
+    id: 5,
     label: 'Discord',
     title: 'Invite for ZVK chat.',
     href: 'https://discord.gg/SCc2Q8aV',

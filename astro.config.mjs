@@ -57,7 +57,8 @@ export default defineConfig({
           'arrow-top-right',
           'code-braces',
           'code-tags',
-          'email-outline']
+          'email-outline',
+          'whatsapp']
     }
   }),
     sitemap({
