@@ -4,9 +4,9 @@ import ProfileImage from '../profile-image.astro';
 import { SocialMediaLinks } from '../../util/link/social-media';
 import { FOCUS } from './focus';
 
-// Type sizes and gaps are measured off the reference render: name cap height
-// 67px (≈92px type) on a 74px line, one-line lead sentence at 500px, social
-// row 32px under a 48px button.
+// Stacked composition: the photo sits above the name at every width. The 32rem
+// gutters leave a 415px column from 1280px up, which cannot hold the photo and
+// the text side by side.
 const LABELS: Record<string, string> = {
   Github: 'GitHub',
   LinkedIn: 'LinkedIn',
@@ -19,19 +19,21 @@ const social = Object.keys(LABELS)
 ---
 
 <section
-  class="mx-auto flex max-w-home flex-col-reverse gap-10 px-5 pb-5 pt-7 md:px-8 lg:px-12 xl:px-48 lg:flex-row lg:items-start lg:justify-between lg:gap-8">
-  <div class="lg:flex-1 lg:max-w-[700px]">
+  class="mx-auto flex max-w-home flex-col-reverse gap-8 px-5 pb-7 pt-7 md:px-8 lg:px-12 xl:px-[32rem]">
+  <div>
     <p class="m-0 text-sm uppercase tracking-[0.2em] text-home-muted">
       Desenvolvedor &amp; analista de sistemas
     </p>
 
+    {/* Capped at 84px: "Zaveruka." measures 4.58em, so anything larger spills
+        out of the narrow column the wide gutters leave behind. */}
     <h1
-      class="mb-6 mt-3 text-[clamp(3rem,7.4vw,5.75rem)] font-extrabold leading-[0.8] tracking-[-0.025em] text-home-text">
+      class="mb-6 mt-3 text-[clamp(2.75rem,7.4vw,5.25rem)] font-extrabold leading-[0.85] tracking-[-0.025em] text-home-text">
       Emanuel<br /><span class="text-home-accent">Zaveruka.</span>
     </h1>
 
     <p
-      class="m-0 max-w-[700px] text-[1.5rem] font-medium leading-snug tracking-[-0.01em] text-home-text md:text-[1.6875rem]">
+      class="m-0 text-[1.5rem] font-medium leading-snug tracking-[-0.01em] text-home-text md:text-[1.6875rem]">
       Conecto processos, sistemas e dados.
     </p>
 
@@ -43,7 +45,7 @@ const social = Object.keys(LABELS)
       <a
         href="#projetos"
         class:list={[
-          'inline-flex h-12 items-center rounded-md bg-home-accent px-6 font-semibold text-home-on-accent no-underline transition-colors hover:bg-[#c2daff]',
+          'inline-flex h-14 items-center rounded-lg bg-home-accent px-7 font-semibold text-home-on-accent no-underline transition-colors hover:bg-[#c2daff]',
           FOCUS
         ]}>
         Ver projetos
@@ -87,9 +89,9 @@ const social = Object.keys(LABELS)
     </ul>
   </div>
 
-  <div class="flex shrink-0 justify-center lg:mt-[15px] lg:justify-end">
+  <div class="flex shrink-0 justify-center">
     <ProfileImage
-      class="h-36 w-36 md:h-44 md:w-44 lg:h-[22.125rem] lg:w-[22.125rem]"
+      class="h-36 w-36 md:h-44 md:w-44 lg:h-64 lg:w-64 xl:h-[17.5rem] xl:w-[17.5rem]"
       alt="Retrato de Emanuel Zaveruka"
     />
   </div>
