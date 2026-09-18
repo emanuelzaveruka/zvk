@@ -1,0 +1,35 @@
+---
+import { Icon } from 'astro-icon/components';
+import { SocialMediaLinks } from '../../util/link/social-media';
+import { SITE_NAME } from '../../util/site';
+import { FOCUS } from './focus';
+
+// "Vamos conversar" abre o WhatsApp; o e-mail continua no hero e no rodapé das
+// outras páginas.
+const contact = SocialMediaLinks.find((link) => link.label === 'WhatsApp')?.href;
+---
+
+<footer class="mx-auto max-w-home px-5 pb-12 md:px-8">
+  <div
+    class="flex flex-col gap-3 border-t border-home-border pt-6 text-sm sm:flex-row sm:items-center sm:justify-between">
+    <span class="text-home-muted">{SITE_NAME}</span>
+
+    {
+      contact && (
+        <a
+          href={contact}
+          class:list={[
+            'group inline-flex items-center gap-2 text-home-muted no-underline transition-colors hover:text-home-text',
+            FOCUS
+          ]}>
+          Vamos conversar
+          <Icon
+            name="mdi:arrow-top-right"
+            aria-hidden="true"
+            class="h-4 w-4 transition-colors group-hover:text-home-accent"
+          />
+        </a>
+      )
+    }
+  </div>
+</footer>

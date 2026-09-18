@@ -1,0 +1,43 @@
+---
+import { FOCUS } from './focus';
+
+// Measured off the reference: brand ink at y45, nav gaps of ~35px.
+const links = [
+  { label: 'Projetos', href: '#projetos' },
+  { label: 'Escritos', href: '#escritos' },
+  { label: 'Sobre', href: '/sobre/' }
+];
+---
+
+<header class="w-full">
+  <nav
+    aria-label="Navegação principal"
+    class="mx-auto flex max-w-home flex-wrap items-center justify-between gap-x-8 gap-y-3 px-5 pb-[38px] pt-9 md:px-8">
+    <a
+      href="/"
+      aria-label="Emanuel Zaveruka — início"
+      class:list={[
+        'text-[1.875rem] font-extrabold leading-none tracking-tight text-home-text no-underline transition-colors hover:text-home-accent',
+        FOCUS
+      ]}>
+      ez<span class="text-home-accent">.</span>
+    </a>
+
+    <ul class="m-0 flex list-none items-center gap-x-9 gap-y-2 p-0 text-base">
+      {
+        links.map((link) => (
+          <li class="p-0">
+            <a
+              href={link.href}
+              class:list={[
+                'text-home-muted no-underline transition-colors hover:text-home-text',
+                FOCUS
+              ]}>
+              {link.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+</header>

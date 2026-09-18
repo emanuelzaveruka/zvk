@@ -1,0 +1,46 @@
+---
+import { Icon } from 'astro-icon/components';
+import { FOCUS } from './focus';
+
+interface Props {
+  /** Decorative index from the mockup (`01`, `02`) — hidden from assistive tech. */
+  index: string;
+  title: string;
+  /** Right-hand link, rendered only when a real destination exists. */
+  href?: string;
+  linkLabel?: string;
+  /** Diagonal for anything leaving the site, straight arrow for internal. */
+  external?: boolean;
+}
+
+const { index, title, href, linkLabel, external = false } = Astro.props;
+---
+
+<div
+  class="flex flex-wrap items-center justify-between gap-x-6 gap-y-2 border-t border-home-border pt-7">
+  <div class="flex items-baseline gap-4">
+    <span aria-hidden="true" class="text-xs tracking-[0.2em] text-home-muted">{index}</span>
+    <h2 class="m-0 text-2xl font-bold tracking-tight text-home-text md:text-[1.75rem]">
+      {title}
+    </h2>
+  </div>
+
+  {
+    href && linkLabel && (
+      <a
+        href={href}
+        {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+        class:list={[
+          'group inline-flex items-center gap-2 text-[0.9375rem] text-home-muted no-underline transition-colors hover:text-home-text',
+          FOCUS
+        ]}>
+        {linkLabel}
+        <Icon
+          name={external ? 'mdi:arrow-top-right' : 'mdi:arrow-right'}
+          aria-hidden="true"
+          class="h-4 w-4 transition-colors group-hover:text-home-accent"
+        />
+      </a>
+    )
+  }
+</div>

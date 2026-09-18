@@ -15,6 +15,10 @@ interface Props {
   light?: boolean;
   mainClass?: string;
   footer?: boolean;
+  /** Extra classes on <body>, for a page with its own background. */
+  bodyClass?: string;
+  /** Full-bleed: drops the centering wrapper so a page can own its layout. */
+  bare?: boolean;
   /** Extra JSON-LD node (e.g. a BlogPosting) merged into the page @graph. */
   schema?: Record<string, unknown>;
 }
@@ -25,13 +29,16 @@ const {
   footer = true,
   light,
   schema,
+  bodyClass,
+  bare = false,
+  mainClass,
   headerClass = '!text-sm !font-normal'
 } = Astro.props;
 
 // `sameAs` links let search engines tie this page to the same real-world entity
 // across profiles, which is what makes the Person node worth emitting at all.
-const profileUrls = SocialMediaLinks.map((link) => link.href).filter((href) =>
-  href.startsWith('http')
+const profileUrls = SocialMediaLinks.map((link) => link.href).filter(
+  (href) => href.startsWith('http') && !href.includes('wa.me')
 );
 
 const person = {
@@ -122,19 +129,33 @@ const ldJson = JSON.stringify({
   </head>
 
   <body
-    class='antialiased flex w-full flex-col justify-center items-center tracking-tight dark:bg-neutral-900 dark:text-neutral-50 min-h-screen'
+    class:list={[
+      'antialiased flex w-full flex-col justify-center items-center tracking-tight dark:bg-neutral-900 dark:text-neutral-50 min-h-screen',
+      bodyClass
+    ]}
   >
-    <div class="flex justify-start items-start max-w-prose:flex-col-reverse">
-      <main
-        class:list={[
-          "flex flex-col items-center justify-center gap-5 p-5 h-full",
-          Astro.props.class,
-        ] }
-      >
-        <slot />
+    {
+      /* `bare` hands the page the full viewport width, with no prose wrapper
+         and no fixed icon nav. Only the redesigned home asks for it; every
+         other page renders exactly the markup it did before. */
+      bare ? (
+        <main class:list={['w-full', mainClass]}>
+          <slot />
         </main>
-        {header && <MainNav class={headerClass} />}
-    </div>
+      ) : (
+        <div class="flex justify-start items-start max-w-prose:flex-col-reverse">
+          <main
+            class:list={[
+              "flex flex-col items-center justify-center gap-5 p-5 h-full",
+              Astro.props.class,
+            ] }
+          >
+            <slot />
+          </main>
+          {header && <MainNav class={headerClass} />}
+        </div>
+      )
+    }
     {footer && <Footer />}
   </body>
 </html>

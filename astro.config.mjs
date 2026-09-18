@@ -52,7 +52,13 @@ export default defineConfig({
           'discord',
           'star',
           'content-copy',
-          'check']
+          'check',
+          'arrow-right',
+          'arrow-top-right',
+          'code-braces',
+          'code-tags',
+          'email-outline',
+          'whatsapp']
     }
   }),
     sitemap({

@@ -1,97 +1,21 @@
 ---
-import "../style/global.css";
-import Section from "../components/section.astro";
-import Document from "../layouts/document.astro";
-import { SocialMediaLinks } from "../util/link/social-media";
-import SocialMediaCard from "../components/social-media-card.astro";
-import ProjectCard from "../components/project-card.astro";
-import projects from "../data/project.json";
-import {posts, sortedPosts} from "../util/get-post";
-import PostCard from "../components/post-card.astro";
-import ProfileImage from "../components/profile-image.astro";
+import Document from '../layouts/document.astro';
+
+import SiteHeader from '../components/home/site-header.astro';
+import Hero from '../components/home/hero.astro';
+import FeaturedProjects from '../components/home/featured-projects.astro';
+import WritingList from '../components/home/writing-list.astro';
+import HomeFooter from '../components/home/home-footer.astro';
 ---
 
-<Document>
-    <Section class="flex flex-col-reverse md:flex-row items-center md:items-start gap-0 gap-6">
-      <div class="flex-1 text-center md:text-left">
-        <h1 class="text-left !text-4xl sm:!text-5xl md:!text-7xl !pt-6 md:!pt-10">
-          <span class="text-blue-200">E aí <span id="wave-hand" class="wave-hand inline-block">👋</span></span> <br/>
-          <span>Eu sou </span> <br/>
-          <span class="text-blue-100">Emanuel Zaveruka</span>
-        </h1>
-      </div>
-      <div class="flex-shrink-0">
-        <ProfileImage/>
-      </div>  
-    </Section>
-    <Section>
-      <p>
-        Sou analista de sistemas e estou me formando em Engenharia de Software. Meu trabalho é entender o que a área de negócio precisa e transformar isso em algo que funcione de verdade: processo mapeado, sistema integrado, dado confiável.
-      </p>
-
-      <p>
-        Entrei na reta final da implantação de um CRM Salesforce, estruturando processos comerciais, integrações com sistemas legados e o alinhamento com as áreas de negócio. Com fluig, participei de projetos de CRM e de Purchase Order nas operações da Toyama na América Latina e na Ásia.
-      </p>
-
-      <p>
-        Também mapeio processos de TI em nível de CSC, com foco em governança e eficiência operacional, e escrevo rotinas de ETL em Python para reunir dados de origens diferentes — são eles que sustentam os relatórios executivos e as decisões de tecnologia.
-      </p>
-    </Section>
-  <Section>
-
-    <p class="mt-8 mb-4">
-      Descubra mais de mim nas redes sociais:
-    </p>
-    <div class="transition-all grid grid-cols-4 max-[450px]:grid-cols-2 max-[750px]:grid-cols-2 gap-4 my-6">
-      {
-        SocialMediaLinks.map((mediaLink) => (
-          <SocialMediaCard data={mediaLink} />
-        ))
-      }
-    </div>
-  </Section>
-  <Section>
-    <p>Alguns dos meus projetos de código aberto:</p>
-
-    <ol class="list-none w-full my-8 gap-x-4 gap-y-1 !p-0 grid grid-cols-2 max-[500px]:grid-cols-1">
-      {
-        projects.map((project) => (
-          <li class="!p-0 !h-auto">
-            <ProjectCard data={project} />
-          </li>
-        ))
-      }
-    </ol>
-
-    {
-      !!posts.length && (
-        <Section>
-          <p>
-            E aqui eu registro o que aprendi na prática — processos, tecnologia e desenvolvimento, o que funcionou e o que quebrou:
-          </p>
-
-          <ol class="!p-0 !m-0 list-none w-full">
-            {sortedPosts.map((post) => (
-              <li
-                class:list={[
-                  "transition-all hover:bg-neutral-800/70 border border-neutral-800/70 hover:border-neutral-600 p-4 rounded-lg w-full inline-flex items-center justify-center",
-                  !post.data.published && "!bg-yellow-950",
-                ]}
-              >
-                <PostCard data={post} />
-              </li>
-            ))}
-          </ol>
-
-          <p class="text-center mt-6">
-            <a href="/blog/">Ver todos os posts</a>
-          </p>
-        </Section>
-      )
-    }
-  </Section>
+<Document
+  bare
+  header={false}
+  footer={false}
+  bodyClass="!bg-home-bg !text-home-text font-grotesk !justify-start">
+  <SiteHeader />
+  <Hero />
+  <FeaturedProjects />
+  <WritingList />
+  <HomeFooter />
 </Document>
-
-<script>
-  import "../util/wave-hand.ts";
-</script>

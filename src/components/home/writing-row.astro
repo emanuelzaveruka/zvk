@@ -1,0 +1,54 @@
+---
+import { Icon } from 'astro-icon/components';
+import type { CollectionEntry } from 'astro:content';
+import { postPath } from '../../util/get-post';
+import { getReadTime } from '../../util/read-time';
+import { FOCUS } from './focus';
+
+interface Props {
+  post: CollectionEntry<'blog'>;
+}
+
+const { post } = Astro.props;
+const date = post.data.date;
+
+// `17 set 2026`, not pt-BR's default `17 de set. de 2026`. Formatted in the
+// build's own timezone on purpose: the frontmatter dates are wall-clock with no
+// offset, so parsing and formatting in the same zone is what stops a post dated
+// the 17th from rendering as the 16th.
+const parts = new Intl.DateTimeFormat('pt-BR', {
+  day: '2-digit',
+  month: 'short',
+  year: 'numeric'
+})
+  .formatToParts(date)
+  .reduce<Record<string, string>>((all, part) => ({ ...all, [part.type]: part.value }), {});
+
+const formatted = `${parts.day} ${parts.month.replace('.', '')} ${parts.year}`;
+const minutes = getReadTime(post.body);
+---
+
+<a
+  href={postPath(post.slug)}
+  class:list={[
+    'group flex items-center justify-between gap-6 border-t border-home-border pb-4 pt-4 no-underline',
+    FOCUS
+  ]}>
+  <span class="flex flex-col gap-0.5">
+    <span class="text-[0.9375rem] text-home-muted">
+      <time datetime={date.toISOString()}>{formatted}</time>
+      {minutes > 0 && <span>· {minutes} min de leitura</span>}
+    </span>
+
+    <span
+      class="text-[1.4375rem] font-semibold leading-snug text-home-text transition-colors group-hover:text-home-accent">
+      {post.data.title}
+    </span>
+  </span>
+
+  <Icon
+    name="mdi:arrow-right"
+    aria-hidden="true"
+    class="h-5 w-5 shrink-0 text-home-muted transition-colors group-hover:text-home-accent"
+  />
+</a>
