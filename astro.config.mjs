@@ -56,8 +56,8 @@ export default defineConfig({
           'arrow-right',
           'arrow-top-right',
           'code-braces',
-          'code-tags',
-          'email-outline',
+          'robot-outline',
+          'sync',
           'whatsapp']
     }
   }),

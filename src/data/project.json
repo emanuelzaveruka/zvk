@@ -1,24 +1,24 @@
 [
   {
     "owner": "emanuelzaveruka",
-    "name": "userdept",
-    "prettyName": "User Dept",
-    "description": "Sistema (API REST) de usuários e departamentos em Java com Spring Boot.",
+    "name": "pap",
+    "prettyName": "Personal Automation Platform",
+    "description": "Plataforma de automação pessoal para coletar, deduplicar e distribuir informações.",
     "stars": 0,
     "downloads": 0,
-    "tech": "Java / Spring Boot",
-    "summary": "API REST de usuários e departamentos.",
-    "icon": "mdi:code-tags"
+    "tech": "Python / PostgreSQL / Docker",
+    "summary": "Automação pessoal para monitorar fontes e entregar apenas informações novas.",
+    "icon": "mdi:robot-outline"
   },
   {
     "owner": "emanuelzaveruka",
-    "name": "msEmail",
-    "prettyName": "MS Email",
-    "description": "Sistema de gerenciamento de emails em Java com Spring Boot.",
+    "name": "crm_sync",
+    "prettyName": "CRM Sync",
+    "description": "Serviço que publica dados analíticos do PostgreSQL no Salesforce via Bulk API 2.0.",
     "stars": 0,
     "downloads": 0,
-    "tech": "Java / Spring Boot",
-    "summary": "Microsserviço para envio de e-mails.",
-    "icon": "mdi:email-outline"
+    "tech": "Python / PostgreSQL / Salesforce",
+    "summary": "Sincronização incremental e idempotente entre PostgreSQL e Salesforce.",
+    "icon": "mdi:sync"
   }
 ]
