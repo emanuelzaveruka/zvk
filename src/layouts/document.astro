@@ -130,23 +130,31 @@ const ldJson = JSON.stringify({
 
   <body
     class:list={[
-      'antialiased flex w-full flex-col justify-center items-center tracking-tight dark:bg-neutral-900 dark:text-neutral-50 min-h-screen',
+      'antialiased flex w-full max-w-full overflow-x-clip flex-col justify-center items-center tracking-tight dark:bg-neutral-900 dark:text-neutral-50 min-h-screen',
       bodyClass
     ]}
   >
     {
       /* `bare` hands the page the full viewport width, with no prose wrapper
          and no fixed icon nav. Only the redesigned home asks for it; every
-         other page renders exactly the markup it did before. */
+         other page renders exactly the markup it did before.
+
+         `w-full min-w-0` on the wrapper and on <main> is load-bearing: body
+         centers its children, so without a width they size to their content
+         and, being flex items with `min-width: auto`, cannot shrink below the
+         widest thing inside them. One wide table then stretched the entire
+         page and every post got a horizontal scrollbar on a phone. A definite
+         width is also what makes `max-width: 100%` on images and `width: 100%`
+         on tables resolve at all — percentages need a definite container. */
       bare ? (
         <main class:list={['w-full', mainClass]}>
           <slot />
         </main>
       ) : (
-        <div class="flex justify-start items-start max-w-prose:flex-col-reverse">
+        <div class="flex w-full min-w-0 justify-start items-start">
           <main
             class:list={[
-              "flex flex-col items-center justify-center gap-5 p-5 h-full",
+              "flex w-full min-w-0 max-w-full flex-col items-center justify-center gap-5 p-5 h-full",
               Astro.props.class,
             ] }
           >

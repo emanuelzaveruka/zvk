@@ -3,9 +3,9 @@ import { Icon } from "astro-icon/components";
 const year = new Date().getFullYear();
 ---
 
-<footer class="footer m-0 mt-8 pb-8 flex flex-col items-center gap-4">
-  <div class="text-base font-thin flex items-center gap-2">
-    Contato: <a href="mailto:emanuel@emanuelzaveruka.com" class="hover:underline">emanuel@emanuelzaveruka.com</a>
+<footer class="footer m-0 mt-8 w-full min-w-0 px-5 pb-8 flex flex-col items-center gap-4">
+  <div class="text-base font-thin flex flex-wrap justify-center items-center gap-2 text-center">
+    Contato: <a href="mailto:emanuel@emanuelzaveruka.com" class="hover:underline break-all">emanuel@emanuelzaveruka.com</a>
     <button id="copy-email" title="Copiar e-mail" class="inline-flex items-center text-neutral-400 hover:text-white transition-colors">
       <span id="icon-copy"><Icon name="mdi:content-copy" size={16} /></span>
       <span id="icon-check" class="hidden"><Icon name="mdi:check" size={16} /></span>
