@@ -79,6 +79,10 @@ const { Content } = await post.render();
 
 <style is:global lang='scss'>
   .md {
+    /* A single long token (a URL, an identifier) must not be able to set the
+       width of the page. */
+    @apply break-words;
+
     pre {
       @apply font-mono p-4 rounded-md;
       font-family: 'Cascadia Code', Consolas, monaco, monospace !important;
