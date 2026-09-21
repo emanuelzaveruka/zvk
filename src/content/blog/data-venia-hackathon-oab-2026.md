@@ -4,6 +4,7 @@ date: 2026/09/17 18:00:00
 keywords:
   [hackathon, oab-pr, postmortem, ia, data venia, tjpr, jurisprudência, produto]
 description: Postmortem do Hackathon da OAB-PR 2026 - o que construímos no Data VênIA, o que quebrou perto da apresentação e o que eu faria diferente.
+updated: 2026/09/20 10:00:00
 published: true
 image: /images/hackatonOAB2026/fluxoDaSolucao.png
 ---
@@ -18,7 +19,7 @@ A investigação daquele problema tinha começado por volta das 12h30, quando um
 
 Tudo isso existia em uma aplicação que, olhando o repositório, parecia ter avançado muito.
 
-Terminamos o hackathon em 9º lugar. Tínhamos uma aplicação publicada, integração com o TJPR, análise de acórdãos e geração de relatório. Também tínhamos uma reescrita de frontend abandonada, dois reverts feitos de madrugada e partes importantes do fluxo sendo testadas pela primeira vez no domingo.
+Terminamos o hackathon em 9º lugar. Tínhamos uma aplicação publicada, integração com o TJPR, análise de acórdãos e geração de relatório. Também tínhamos uma reescrita de frontend abandonada, dois reverts feitos de madrugada e uma aplicação que ainda precisaria passar pela auditoria na manhã de domingo antes da apresentação final.
 
 Foi por isso que resolvi escrever este postmortem.
 
@@ -36,7 +37,7 @@ Naquela edição, focamos demais na solução. Gastamos energia construindo e de
 
 Voltei em 2026 querendo corrigir esse erro. Em vários aspectos, corrigimos.
 
-A nova equipe teve uma dinâmica muito melhor. Nathalia Gatt e Isabele Cristina traziam a perspectiva jurídica em conjunto com a Natally Barbosa que trabalhava no problema na narrativa de valor e liderança. Pamela Damazo cuidava da experiência visual, da apresentação dos dados e produziu o protótipo em HTML que depois serviria de referência para o frontend.
+A nova equipe teve uma dinâmica muito melhor. Nathalia Gatt, Isabele Cristina e Natally Barbosa trouxeram a perspectiva jurídica, a narrativa de valor e a liderança do trabalho. Pamela Damazo cuidou da experiência visual, da apresentação dos dados e do protótipo em HTML que orientou o frontend.
 
 Na parte técnica, Felipe Bassetti ficou principalmente com a arquitetura e a integração com o TJPR. Eu trabalhei na interface, integrações e implantação.
 
@@ -116,13 +117,15 @@ Ao mesmo tempo, a identidade visual estava pronta e o protótipo da Pamela mostr
 
 Melhorar o frontend fazia sentido. O horário, não. Às 15h54, comecei uma reescrita.
 
-Nossa próxima entrega estava marcada para 17h30 e previa uma versão validada com testes externos. Eu tinha uma hora e trinta e seis minutos. Às 17h02, me perguntei como testar aquela mudança sem quebrar a auditória. Essa pergunta deveria ter vindo antes da primeira linha da reescrita.
+Nossa próxima entrega estava marcada para 17h30 e previa uma versão validada com testes externos. Eu tinha uma hora e trinta e seis minutos. Às 17h02, me perguntei como testar aquela mudança sem comprometer essa validação. Essa pergunta deveria ter vindo antes da primeira linha da reescrita.
 
-![Eu e Felipe no momento da auditoria, respondendo a perguntas técnicas da solução.](/images/hackatonOAB2026/fotoAuditoria.jpeg 'Eu e Felipe no momento da auditoria, respondendo a perguntas técnicas da solução.')
+Às 17h30, rodamos os testes externos mesmo sem a nova versão do frontend estar finalizada. O fluxo funcionou sem problemas relevantes e o retorno dos usuários foi positivo. A solução fazia sentido para quem estava vendo de fora.
 
 A IA tornava perfeitamente possível produzir uma quantidade enorme de interface dentro daquela janela. O que ela não eliminava era o restante do trabalho: integrar com o que outra pessoa estava desenvolvendo, resolver conflitos, testar o fluxo completo, publicar e verificar novamente.
 
 ## A madrugada virou uma disputa por estabilidade
+
+Os testes externos tinham passado sem maiores problemas, mas a interface que queríamos levar para o domingo ainda não estava pronta. A madrugada passou a ser nossa janela para integrar o novo frontend, estabilizar o fluxo e preparar a versão que seria auditada às 10h30.
 
 Boa parte da madrugada foi dedicada a transformar o protótipo da Pamela em uma interface conectada ao sistema real.
 
@@ -145,6 +148,8 @@ A implementação ficou pronta tão rápido que a diferença entre o que eu pedi
 
 ## No domingo, a realidade começou a entrar no sistema
 
+Mas o domingo ainda revelaria problemas que os testes externos do sábado e a própria preparação para a auditoria não tinham exposto.
+
 Às 06h31 encontramos um problema na sanitização.
 
 O nome de uma parte aparecia de uma forma que nossos exemplos não previam e escapava do tratamento.
@@ -154,11 +159,19 @@ Corrigimos. Depois vieram outros casos.
 - Links que pareciam oficiais precisavam realmente apontar para a fonte correta.
 - Filtros que faziam sentido para nós precisavam fazer sentido para quem estava testando.
 
-Às 12h53, encontramos um PDF de quatro páginas do qual nosso extrator obtinha exatamente zero caracteres.
+Às 10h30, chegou o momento da auditoria. Rodamos com o auditor a versão que eu havia preparado durante a madrugada. O fluxo principal estava disponível e conseguimos apresentar a solução.
 
-Adicionamos uma verificação para detectar o cenário e explicar a limitação antes de iniciar a análise. Implementar OCR naquele momento ficou fora do escopo.
+![Eu e Felipe no momento da auditoria, respondendo a perguntas técnicas da solução.](/images/hackatonOAB2026/fotoAuditoria.jpeg 'Eu e Felipe no momento da auditoria, respondendo a perguntas técnicas da solução.')
 
-Também descobrimos um problema no outro extremo do fluxo. O relatório exportado precisava permitir que o advogado selecionasse texto e clicasse nos links. Conseguimos gerar esse PDF localmente.
+Mas passar pela auditoria não significava que o produto estava estabilizado.
+
+O restante do domingo continuou revelando situações que nem os testes externos do sábado nem a preparação da madrugada haviam coberto.
+
+Às 12h53, encontrei um PDF de quatro páginas do qual nosso extrator obtinha exatamente zero caracteres.
+
+Adicionei uma verificação para detectar o cenário e explicar a limitação antes de iniciar a análise. Implementar OCR naquele momento ficou fora do escopo.
+
+Também descobri um problema no outro extremo do fluxo. O relatório exportado precisava permitir que o advogado selecionasse texto e clicasse nos links. Conseguimos gerar esse PDF localmente.
 
 Na Vercel, ele falhou.
 
@@ -166,9 +179,9 @@ Os arquivos de fonte utilizados pelo gerador não tinham acompanhado o pacote de
 
 Entrada e saída estavam mostrando a mesma coisa para nós: testar uma parte isoladamente não significava testar o produto.
 
-## 12h30: por que “saúde” não encontra nada?
+## 13h00: por que “saúde” não encontra nada?
 
-Por volta das 12h30, eu e Felipe começamos a investigar a busca. Usamos “saúde”, um termo que deveria produzir resultados facilmente.
+Por volta das 13h00, eu e Felipe começamos a investigar a busca. Usamos “saúde”, um termo que deveria produzir resultados facilmente.
 
 Nossa aplicação não encontrava nada.
 
@@ -214,7 +227,7 @@ Mas naquele momento ficou impossível ignorar quanto do nosso tempo tinha sido c
 
 ## Então eu fui olhar os números
 
-Depois do evento, fui levantar o volume de desenvolvimento. Os números são grandes.
+Depois do evento, fui levantar o volume em linhas de código. Os números são grandes.
 
 No levantamento:
 
@@ -264,7 +277,7 @@ Em 2026, o aprendizado foi outro:
 
 Não basta construir muitas funcionalidades. A equipe precisa chegar a uma versão que consiga conhecer, testar, estabilizar e apresentar com segurança.
 
-Terminamos o hackathon com uma aplicação funcional, uma equipe que conseguiu construir junta e um problema que ainda vale investigar. O Data VênIA não está pronto — e hoje isso está muito mais claro.
+Terminamos o hackathon com uma aplicação com o fluxo principal funcionando, uma equipe que conseguiu construir junta e um problema que ainda vale investigar. O Data VênIA não está pronto — e hoje isso está muito mais claro.
 
 O hackathon mostrou que conseguimos construir rápido. Agora precisamos provar que conseguimos transformar essa velocidade em um produto confiável.
 
