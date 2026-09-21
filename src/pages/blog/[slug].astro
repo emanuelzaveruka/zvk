@@ -103,6 +103,22 @@ const { Content } = await post.render();
       @apply mx-auto h-auto max-w-full;
     }
 
+    /* Wide tables scroll inside their own wrapper instead of stretching the
+       page. The wrapper comes from rehype-post-tables; `min-w-full` keeps the
+       table spanning the prose column when it fits, `w-max` lets it grow past
+       it when it doesn't, and only the wrapper scrolls. */
+    .table-scroll {
+      @apply my-8 overflow-x-auto;
+
+      table {
+        @apply my-0 w-max min-w-full;
+      }
+
+      &:focus-visible {
+        @apply outline outline-2 outline-offset-2 outline-neutral-500;
+      }
+    }
+
     /* Illustrations: `![alt](/images/... 'Caption')` becomes figure + caption
        through the rehype plugin, so captions read as captions and not prose. */
     figure {
