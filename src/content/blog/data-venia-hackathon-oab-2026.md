@@ -15,7 +15,7 @@ Faltavam sete minutos para começarem as apresentações da nossa categoria no H
 
 Sem elas, uma parte essencial da busca não funcionava como deveria. Às 16h30, precisávamos apresentar.
 
-A investigação daquele problema tinha começado por volta das 12h30, quando uma busca aparentemente simples por “saúde” não retornava resultados. Nas quatro horas seguintes encontramos problemas de encoding, filtros que restringiam demais as consultas, configuração incompleta do ambiente e gargalos de desempenho.
+A investigação daquele problema tinha começado por volta das 13h00, quando uma busca aparentemente simples por “saúde” não retornava resultados. Nas horas seguintes encontramos problemas de encoding, filtros que restringiam demais as consultas, configuração incompleta do ambiente e gargalos de desempenho.
 
 Tudo isso existia em uma aplicação que, olhando o repositório, parecia ter avançado muito.
 
