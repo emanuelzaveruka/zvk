@@ -5,6 +5,7 @@ import tailwind from '@astrojs/tailwind';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import rehypeSlug from 'rehype-slug';
 import rehypePostImages from './src/util/lib/rehype-post-images';
+import rehypePostTables from './src/util/lib/rehype-post-tables';
 import icon from "astro-icon";
 import sitemap from '@astrojs/sitemap';
 
@@ -27,7 +28,9 @@ export default defineConfig({
       rehypeSlug,
       [rehypeAutolinkHeadings, { behavior: 'wrap' }],
       // Markdown images become <figure> + <figcaption>, with intrinsic sizes.
-      rehypePostImages
+      rehypePostImages,
+      // Tables get a scroll container so a wide one can't drag the page with it.
+      rehypePostTables
     ],
     shikiConfig: {
       wrap: true,
