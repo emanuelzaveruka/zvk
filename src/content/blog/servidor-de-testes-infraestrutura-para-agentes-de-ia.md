@@ -82,6 +82,8 @@ Eu não queria depender apenas de uma instrução dizendo:
 
 Eu queria que o agente simplesmente não conseguisse mexer.
 
+![Agentes de três projetos num ambiente compartilhado, onde arquivos, contexto, handoffs, Docker e recursos pessoais circulam livremente; à direita, um guardrail com o bilhete "Não acesse isso" e, depois dele, uma parede de fronteira real](/images/localServerImages/fronteiraRealNoAmbienteCompartilhado.png 'Um guardrail é um bilhete pedindo para não acessar. A fronteira real é a parede que impede o acesso.')
+
 ## Um ambiente por projeto
 
 Hoje cada projeto fica muito mais delimitado. Workspace próprio. Contexto próprio. Git próprio.
