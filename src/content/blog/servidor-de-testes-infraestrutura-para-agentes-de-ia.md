@@ -96,30 +96,7 @@ A proposta dele não é tratar um agente como apenas mais um terminal aberto den
 
 O que adicionei por cima foi uma fronteira mais rígida para o meu cenário: além de separar o trabalho, eu também queria controlar o que cada agente consegue alcançar no host.
 
-O desenho simplificado ficou mais ou menos assim:
-
-```text
-Orca
-  |
-  v
-ai-jail
-  |
-  +-- Codex
-  +-- Antigravity
-  +-- Claude
-  |
-  v
-Orca restrito
-  |
-  v
-Broker
-  |
-  +-- políticas
-  +-- Git
-  +-- operações no host
-```
-
-E este é o caminho completo de uma tarefa, do pedido até o pull request:
+O caminho completo de uma tarefa, do pedido até o pull request, ficou assim:
 
 ![Diagrama do caminho de uma tarefa: Orca Client via Tailscale, Orca Server, ai-jail com coordenador e workers, broker via socket Unix, ai-memory, devops e GitHub](/images/localServerImages/esteiraCompletaDeWorkflowRodandoNaInfra.png 'O caminho real de uma tarefa: do pedido no Orca Client até o PR no GitHub, passando pelo ambiente isolado de cada projeto.')
 
