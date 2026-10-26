@@ -1,0 +1,473 @@
+---
+import { Icon } from 'astro-icon/components';
+
+/**
+ * Full-screen viewer for post illustrations: click, tap or Enter/Space on any
+ * `.md figure img` opens it, with wheel/pinch zoom and drag to pan.
+ *
+ * The page markup stays untouched — the images keep their width/height, so
+ * the layout reserves the same space as before — and the script only adds the
+ * button semantics when it runs. Without JS the images are plain images.
+ */
+---
+
+<dialog class='lightbox' data-lightbox aria-label='Imagem ampliada'>
+  <div class='stage' data-lightbox-stage>
+    <div class='frame'>
+      <img class='picture' data-lightbox-image alt='' draggable='false' />
+    </div>
+  </div>
+
+  <div class='toolbar'>
+    <button type='button' data-lightbox-zoom-out aria-label='Diminuir zoom'>
+      <Icon name='mdi:magnify-minus-outline' aria-hidden='true' />
+    </button>
+    <button type='button' data-lightbox-zoom-in aria-label='Aumentar zoom'>
+      <Icon name='mdi:magnify-plus-outline' aria-hidden='true' />
+    </button>
+    <button type='button' data-lightbox-reset aria-label='Resetar zoom'>
+      <Icon name='mdi:restore' aria-hidden='true' />
+    </button>
+    <button type='button' data-lightbox-close aria-label='Fechar imagem' autofocus>
+      <Icon name='mdi:close' aria-hidden='true' />
+    </button>
+  </div>
+
+  <p class='caption' data-lightbox-caption id='lightbox-caption' hidden></p>
+</dialog>
+
+<style>
+  .lightbox {
+    /* Undo the UA modal box: the dialog itself is the full-screen surface,
+       sized by `inset: 0` so it never adds to the page's scroll width. */
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    overflow: hidden;
+    background: transparent;
+    color: theme('colors.neutral.50');
+  }
+
+  .lightbox[open] {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Nearly opaque: the page behind is light text on dark, which at lower
+     opacities still reads through and fights with the caption. */
+  .lightbox::backdrop {
+    background: rgb(10 10 10 / 0.96);
+    backdrop-filter: blur(4px);
+  }
+
+  /* The stage is the gesture surface and the "background": a tap on it that
+     misses the image closes the viewer. */
+  .stage {
+    position: relative;
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: hidden;
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  /* The image fits inside the frame at 1x; the inset keeps it clear of the
+     toolbar. When zoomed it spills past the frame and the stage clips it. */
+  .frame {
+    position: absolute;
+    inset: 3.75rem 0.75rem 0.75rem;
+  }
+
+  .picture {
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    transform-origin: 50% 50%;
+    cursor: zoom-in;
+    -webkit-user-drag: none;
+  }
+
+  .lightbox[data-zoomed] .picture {
+    cursor: grab;
+  }
+
+  .lightbox[data-dragging] .picture {
+    cursor: grabbing;
+  }
+
+  .toolbar {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    z-index: 1;
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .toolbar button {
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 9999px;
+    border: 1px solid theme('colors.neutral.700');
+    background: rgb(23 23 23 / 0.8);
+    color: inherit;
+    font-size: 1.5rem;
+  }
+
+  .toolbar button:hover:not(:disabled) {
+    background: theme('colors.neutral.800');
+  }
+
+  .toolbar button:disabled {
+    opacity: 0.4;
+  }
+
+  .toolbar button:focus-visible {
+    outline: 2px solid theme('colors.neutral.50');
+    outline-offset: 2px;
+  }
+
+  .caption {
+    flex: none;
+    margin: 0;
+    padding: 0.5rem 1rem calc(0.75rem + env(safe-area-inset-bottom));
+    max-height: 30vh;
+    overflow-y: auto;
+    text-align: center;
+    font-size: 0.875rem;
+    color: theme('colors.neutral.300');
+    overflow-wrap: anywhere;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .lightbox[open],
+    .lightbox[open]::backdrop {
+      animation: lightbox-fade 150ms ease-out;
+    }
+
+    /* Only discrete zooms (buttons, double tap, keys) animate; gestures
+       follow the finger without lag. */
+    .lightbox[data-animate] .picture {
+      transition: transform 200ms ease-out;
+    }
+  }
+
+  @keyframes lightbox-fade {
+    from {
+      opacity: 0;
+    }
+  }
+</style>
+
+<style is:global>
+  /* Post illustrations the viewer has picked up. */
+  .md figure img[data-lightbox-trigger] {
+    cursor: zoom-in;
+  }
+
+  .md figure img[data-lightbox-trigger]:focus-visible {
+    outline: 2px solid theme('colors.neutral.400');
+    outline-offset: 4px;
+  }
+
+  /* Keeps the page still under the viewer; the reserved gutter stops the
+     content from jumping sideways when the scrollbar disappears. */
+  html.lightbox-open {
+    overflow: hidden;
+    scrollbar-gutter: stable;
+  }
+</style>
+
+<script>
+  const MIN = 1;
+  const MAX = 5;
+  const DOUBLE = 2.5;
+  const STEP = 1.5;
+  const TRIGGERS = '.md figure img';
+
+  const dialog = document.querySelector<HTMLDialogElement>('[data-lightbox]');
+
+  if (dialog) setup(dialog);
+
+  function setup(dialog: HTMLDialogElement) {
+    const stage = dialog.querySelector<HTMLElement>('[data-lightbox-stage]')!;
+    const picture = dialog.querySelector<HTMLImageElement>('[data-lightbox-image]')!;
+    const caption = dialog.querySelector<HTMLElement>('[data-lightbox-caption]')!;
+    const zoomIn = dialog.querySelector<HTMLButtonElement>('[data-lightbox-zoom-in]')!;
+    const zoomOut = dialog.querySelector<HTMLButtonElement>('[data-lightbox-zoom-out]')!;
+    const reset = dialog.querySelector<HTMLButtonElement>('[data-lightbox-reset]')!;
+    const close = dialog.querySelector<HTMLButtonElement>('[data-lightbox-close]')!;
+
+    let opener: HTMLImageElement | null = null;
+    let scale = 1;
+    let x = 0;
+    let y = 0;
+
+    // --- Opening -----------------------------------------------------------
+
+    for (const image of document.querySelectorAll<HTMLImageElement>(TRIGGERS)) {
+      image.dataset.lightboxTrigger = '';
+      image.tabIndex = 0;
+      image.setAttribute('role', 'button');
+      image.setAttribute('aria-haspopup', 'dialog');
+      image.setAttribute('aria-label', `Ampliar imagem: ${image.alt || 'ilustração'}`);
+    }
+
+    const triggerOf = (target: EventTarget | null) =>
+      target instanceof HTMLImageElement && target.matches('[data-lightbox-trigger]')
+        ? target
+        : null;
+
+    document.addEventListener('click', (event) => {
+      const image = triggerOf(event.target);
+      if (image) open(image);
+    });
+
+    document.addEventListener('keydown', (event) => {
+      const image = triggerOf(event.target);
+      if (!image || (event.key !== 'Enter' && event.key !== ' ')) return;
+      event.preventDefault();
+      open(image);
+    });
+
+    function open(image: HTMLImageElement) {
+      opener = image;
+
+      picture.src = image.currentSrc || image.src;
+      picture.alt = image.alt;
+      dialog.setAttribute('aria-label', image.alt || 'Imagem ampliada');
+
+      const text = image.closest('figure')?.querySelector('figcaption')?.textContent?.trim();
+      caption.textContent = text ?? '';
+      caption.hidden = !text;
+      if (text) dialog.setAttribute('aria-describedby', caption.id);
+      else dialog.removeAttribute('aria-describedby');
+
+      transform(1, 0, 0, false);
+      document.documentElement.classList.add('lightbox-open');
+      dialog.showModal();
+    }
+
+    // Esc goes through the native `cancel` → `close`; every way out ends here.
+    dialog.addEventListener('close', () => {
+      document.documentElement.classList.remove('lightbox-open');
+      pointers.clear();
+      dialog.removeAttribute('data-dragging');
+      opener?.focus({ preventScroll: true });
+      opener = null;
+    });
+
+    close.addEventListener('click', () => dialog.close());
+
+    // --- Geometry ----------------------------------------------------------
+
+    /** Keeps the image covering the stage when it is larger than it, and
+        inside the stage when it is smaller, so it can never be lost. */
+    function clamp(s: number, tx: number, ty: number): [number, number] {
+      if (s <= MIN) return [0, 0];
+
+      const box = stage.getBoundingClientRect();
+      const frame = center();
+      const w = (picture.offsetWidth * s) / 2;
+      const h = (picture.offsetHeight * s) / 2;
+
+      const fit = (value: number, a: number, b: number) =>
+        Math.min(Math.max(value, Math.min(a, b)), Math.max(a, b));
+
+      return [
+        fit(tx, box.left + w - frame.x, box.right - w - frame.x),
+        fit(ty, box.top + h - frame.y, box.bottom - h - frame.y)
+      ];
+    }
+
+    /** Center of the untransformed image, in viewport coordinates. */
+    function center() {
+      const frame = picture.parentElement!.getBoundingClientRect();
+      return { x: frame.left + frame.width / 2, y: frame.top + frame.height / 2 };
+    }
+
+    function transform(s: number, tx: number, ty: number, animate: boolean) {
+      scale = Math.min(Math.max(s, MIN), MAX);
+      if (scale < MIN + 0.01) scale = MIN;
+      [x, y] = clamp(scale, tx, ty);
+
+      dialog.toggleAttribute('data-animate', animate);
+      dialog.toggleAttribute('data-zoomed', scale > MIN);
+      picture.style.transform = `translate3d(${x}px, ${y}px, 0) scale(${scale})`;
+
+      zoomOut.disabled = scale <= MIN;
+      reset.disabled = scale <= MIN;
+      zoomIn.disabled = scale >= MAX;
+    }
+
+    /** Zooms to `s` keeping the image point under (px, py) where it is. */
+    function zoomAt(s: number, px: number, py: number, animate: boolean) {
+      const c = center();
+      const next = Math.min(Math.max(s, MIN), MAX);
+      const ix = (px - c.x - x) / scale;
+      const iy = (py - c.y - y) / scale;
+      transform(next, px - c.x - next * ix, py - c.y - next * iy, animate);
+    }
+
+    function zoomFromCenter(s: number) {
+      const box = stage.getBoundingClientRect();
+      zoomAt(s, box.left + box.width / 2, box.top + box.height / 2, true);
+    }
+
+    zoomIn.addEventListener('click', () => zoomFromCenter(scale * STEP));
+    zoomOut.addEventListener('click', () => zoomFromCenter(scale / STEP));
+    reset.addEventListener('click', () => transform(MIN, 0, 0, true));
+
+    dialog.addEventListener('keydown', (event) => {
+      if (event.target instanceof HTMLButtonElement && event.key === ' ') return;
+      if (event.key === '+' || event.key === '=') zoomFromCenter(scale * STEP);
+      else if (event.key === '-') zoomFromCenter(scale / STEP);
+      else if (event.key === '0') transform(MIN, 0, 0, true);
+    });
+
+    // --- Wheel -------------------------------------------------------------
+
+    stage.addEventListener(
+      'wheel',
+      (event) => {
+        event.preventDefault();
+        const delta = event.deltaY * (event.deltaMode === 1 ? 16 : 1);
+        // Trackpad pinch arrives as ctrl+wheel with small deltas.
+        const speed = event.ctrlKey ? 0.01 : 0.002;
+        zoomAt(scale * Math.exp(-delta * speed), event.clientX, event.clientY, false);
+      },
+      { passive: false }
+    );
+
+    // --- Pointers: drag, pinch, tap, double tap ----------------------------
+
+    const pointers = new Map<number, { x: number; y: number }>();
+    let start = { x: 0, y: 0, tx: 0, ty: 0 };
+    let pinch = { distance: 1, scale: 1, mx: 0, my: 0, tx: 0, ty: 0 };
+    let moved = false;
+    let multi = false;
+    let downOnImage = false;
+    let lastTap = { time: 0, x: 0, y: 0 };
+
+    const points = () => [...pointers.values()];
+
+    function beginPan() {
+      const [p] = points();
+      start = { x: p.x, y: p.y, tx: x, ty: y };
+    }
+
+    function beginPinch() {
+      const [a, b] = points();
+      pinch = {
+        distance: Math.hypot(a.x - b.x, a.y - b.y) || 1,
+        scale,
+        mx: (a.x + b.x) / 2,
+        my: (a.y + b.y) / 2,
+        tx: x,
+        ty: y
+      };
+    }
+
+    stage.addEventListener('pointerdown', (event) => {
+      if (event.pointerType === 'mouse' && event.button !== 0) return;
+
+      if (pointers.size === 0) {
+        moved = false;
+        multi = false;
+        downOnImage = event.target === picture;
+      }
+
+      stage.setPointerCapture(event.pointerId);
+      pointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
+
+      if (pointers.size === 1) beginPan();
+      else {
+        multi = true;
+        if (pointers.size === 2) beginPinch();
+      }
+    });
+
+    stage.addEventListener('pointermove', (event) => {
+      const pointer = pointers.get(event.pointerId);
+      if (!pointer) return;
+
+      pointer.x = event.clientX;
+      pointer.y = event.clientY;
+
+      if (pointers.size >= 2) {
+        const [a, b] = points();
+        const distance = Math.hypot(a.x - b.x, a.y - b.y);
+        const mx = (a.x + b.x) / 2;
+        const my = (a.y + b.y) / 2;
+        const next = Math.min(Math.max((pinch.scale * distance) / pinch.distance, MIN), MAX);
+
+        // The image point that was under the fingers' midpoint stays under it.
+        const c = center();
+        const ix = (pinch.mx - c.x - pinch.tx) / pinch.scale;
+        const iy = (pinch.my - c.y - pinch.ty) / pinch.scale;
+        transform(next, mx - c.x - next * ix, my - c.y - next * iy, false);
+        moved = true;
+        return;
+      }
+
+      const dx = pointer.x - start.x;
+      const dy = pointer.y - start.y;
+      if (!moved && Math.hypot(dx, dy) < 6) return;
+
+      moved = true;
+      if (scale > MIN) {
+        dialog.setAttribute('data-dragging', '');
+        transform(scale, start.tx + dx, start.ty + dy, false);
+      }
+    });
+
+    function release(event: PointerEvent) {
+      if (!pointers.delete(event.pointerId)) return;
+
+      if (pointers.size === 1) beginPan();
+      else if (pointers.size >= 2) beginPinch();
+      if (pointers.size > 0) return;
+
+      dialog.removeAttribute('data-dragging');
+      if (event.type === 'pointercancel' || moved || multi) return;
+
+      if (!downOnImage) {
+        dialog.close();
+        return;
+      }
+
+      const now = event.timeStamp;
+      const near =
+        Math.hypot(event.clientX - lastTap.x, event.clientY - lastTap.y) < 30;
+
+      if (now - lastTap.time < 300 && near) {
+        lastTap.time = 0;
+        if (scale > MIN) transform(MIN, 0, 0, true);
+        else zoomAt(DOUBLE, event.clientX, event.clientY, true);
+      } else {
+        lastTap = { time: now, x: event.clientX, y: event.clientY };
+      }
+    }
+
+    stage.addEventListener('pointerup', release);
+    stage.addEventListener('pointercancel', release);
+
+    // A resize or rotation changes the fitted size; start over at 1x.
+    window.addEventListener('resize', () => {
+      if (dialog.open) transform(MIN, 0, 0, false);
+    });
+  }
+</script>

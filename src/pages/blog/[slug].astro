@@ -3,6 +3,7 @@ import type { CollectionEntry } from 'astro:content';
 
 import Document from '../../layouts/document.astro';
 
+import ImageLightbox from '../../components/image-lightbox.astro';
 import PostHeader from '../../components/post-header.astro';
 import Section from '../../components/section.astro';
 import { posts, isIndexable, postPath } from '../../util/get-post';
@@ -75,6 +76,8 @@ const { Content } = await post.render();
   <nav class='w-full max-w-3xl pb-10 text-center'>
     <a href='/blog/' rel='up'>&larr; Ver todos os posts</a>
   </nav>
+
+  <ImageLightbox />
 </Document>
 
 <style is:global lang='scss'>

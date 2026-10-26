@@ -61,7 +61,11 @@ export default defineConfig({
           'code-braces',
           'robot-outline',
           'sync',
-          'whatsapp']
+          'whatsapp',
+          'magnify-plus-outline',
+          'magnify-minus-outline',
+          'restore',
+          'close']
     }
   }),
     sitemap({
