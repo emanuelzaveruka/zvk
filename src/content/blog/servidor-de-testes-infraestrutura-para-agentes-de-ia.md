@@ -30,7 +30,7 @@ PostgreSQL, MySQL, Node.js, APIs, containers, pequenos projetos e integrações 
 
 O ganho era simples: eu podia destruir um ambiente, subir outro, testar uma integração e não transformar meu notebook em um depósito permanente de serviços.
 
-O Orca é o orquestrador open source que adotei para controlar os agentes e suas atividades. Antes dele, no notebook, eu já utilizava o Maestri. A partir do Orca, aquela máquina deixou de ser apenas um lugar onde serviços ficavam rodando e passou a ser o lugar onde os agentes efetivamente trabalhavam.
+O [Orca](https://github.com/stablyai/orca) é o orquestrador open source que adotei para controlar os agentes e suas atividades. Antes dele, no notebook, eu já utilizava o Maestri. A partir do Orca, aquela máquina deixou de ser apenas um lugar onde serviços ficavam rodando e passou a ser o lugar onde os agentes efetivamente trabalhavam.
 
 Foi aí que o servidor ganhou uma função muito mais clara.
 
@@ -88,7 +88,7 @@ Eu queria que o agente simplesmente não conseguisse mexer.
 
 Hoje cada projeto fica muito mais delimitado. Workspace próprio. Contexto próprio. Git próprio.
 
-E os provedores de LLM — Codex, Antigravity e Claude — executam dentro de um `ai-jail`.
+E os provedores de LLM — Codex, Antigravity e Claude — executam dentro de um [`ai-jail`](https://github.com/akitaonrails/ai-jail).
 
 Na prática, o `ai-jail` funciona como uma área cercada para o agente: ele consegue trabalhar normalmente dentro daquele espaço, mas não pode simplesmente sair explorando arquivos, comandos e recursos do restante da máquina.
 
@@ -116,7 +116,7 @@ Depois apareceu outro problema. Workers podem ser descartáveis. O conhecimento 
 
 Uma sessão pode conter horas de contexto: regras de negócio, decisões, tentativas que falharam, exceções descobertas durante uma investigação.
 
-Se tudo desaparece quando o worker termina, o próximo agente começa mais burro. Foi aí que o `ai-memory` entrou na arquitetura. O contexto pode continuar existindo fora do ciclo de vida daquele agente. O Codex registra algo, o Claude Code recupera depois.
+Se tudo desaparece quando o worker termina, o próximo agente começa mais burro. Foi aí que o [`ai-memory`](https://github.com/akitaonrails/ai-memory) entrou na arquitetura. O contexto pode continuar existindo fora do ciclo de vida daquele agente. O Codex registra algo, o Claude Code recupera depois.
 
 A memória passa a pertencer ao projeto, não necessariamente ao chat ou ao modelo que criou aquela informação. Mas isso também precisa de limites.
 
