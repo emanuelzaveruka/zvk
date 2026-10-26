@@ -10,9 +10,9 @@ image: /images/localServerImages/esteiraCompletaDeWorkflowRodandoNaInfra.png
 
 Enquanto escrevo este post, alguns agentes estão trabalhando em um computador de aproximadamente 2013.
 
-Ele tem um Intel Core i7-4770, 8 GB de RAM DDR3 e alguns discos reaproveitados. Para quem é leigo, para fins comparativos é como se fosse um carro de 2013 que rodou 600 mil km e ainda continua funcionando, com alguns cavalos a menos mas ainda sendo funcional.
+Ele tem um Intel Core i7-4770, 8 GB de RAM DDR3 e alguns discos reaproveitados. Para quem não é da área, é como um carro de 2013 que já rodou 600 mil km e continua funcionando: tem alguns cavalos a menos, mas ainda cumpre o seu papel.
 
-Do outro lado está meu notebook principal: um Dell G15 com i7-13650HX, 32 GB de DDR5 e RTX 3050. É um esportivo de 2025 que rodou 100 mil km e que está com a manutenção em dia.
+Do outro lado está meu notebook principal: um Dell G15 com i7-13650HX, 32 GB de RAM DDR5 e RTX 3050. É um esportivo de 2025 que rodou 100 mil km e está com a manutenção em dia.
 
 Se a decisão fosse baseada apenas em desempenho, obviamente tudo estaria rodando no notebook.
 
