@@ -48,7 +48,7 @@ Com Ubuntu Server e sem uma interface gráfica pesada, 8 GB de RAM conseguem ate
 
 Você não precisa necessariamente de um servidor caro ou de uma workstation com uma GPU gigantesca para começar a trabalhar com uma infraestrutura de agentes.
 
-Se a inferência está sendo feita por um provider externo, o servidor está principalmente coordenando execução. O que passa a importar muito mais é organização, isolamento e controle.
+Se a inferência está sendo feita por um provedor de LLM externo, o servidor está principalmente coordenando execução. O que passa a importar muito mais é organização, isolamento e controle.
 
 ## O problema que eu queria resolver não era performance
 
