@@ -1,5 +1,5 @@
 ---
-title: 'Eu só queria um servidor de testes. Acabei montando uma infraestrutura para agentes de IA'
+title: 'Dei autonomia aos meus agentes de IA sem perder o controle'
 date: 2026/10/26 12:00:00
 keywords:
   [agentes de ia, orca, ai-jail, ai-memory, homelab, ubuntu server, isolamento, codex, claude, antigravity, infraestrutura]
