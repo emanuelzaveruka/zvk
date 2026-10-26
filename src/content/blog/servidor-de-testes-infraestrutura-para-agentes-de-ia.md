@@ -223,3 +223,9 @@ Mas a ideia central já está bem definida:
 **Agentes autônomos são muito mais úteis quando eu consigo pilotá-los sem precisar microgerenciar cada decisão.**
 
 O modelo faz o trabalho. O Orca organiza a execução. A infraestrutura mantém cada agente dentro da estrada. E meu notebook finalmente pode voltar a ser só meu computador.
+
+## Referências
+
+- [Orca](https://github.com/stablyai/orca): repositório oficial do orquestrador de agentes.
+- [ai-jail](https://github.com/akitaonrails/ai-jail), do Akita: sandbox para rodar agentes de IA com acesso restrito à máquina.
+- [ai-memory](https://github.com/akitaonrails/ai-memory), do Akita: memória de longo prazo para agentes de código e handoff entre provedores.
